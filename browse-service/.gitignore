@@ -1,0 +1,15 @@
+
+node_modules
+
+/html/public/content
+/html/public/data
+/html/public/content-data
+/html/public/config.json
+
+*.iml
+
+/html/public/app/composer/*
+/html/public/app/slim/*
+/html/public/app/parsedown
+/html/public/app/autoload.php 
+

@@ -21,72 +21,79 @@ services:
         logging:
             driver: fluentd
             options:
-                fluentd-address: docker.for.mac.localhost:24224
+                fluentd-address: 172.20.0.6:24224
                 fluentd-sub-second-precision: "true"
+                fluentd-async-connect: "true"
+                fluentd-retry-wait: 1s
+                fluentd-max-retries: 30
                 tag: docker.https-portal
                 env: FLUENTD_STDOUT_FILTER_PATTERN       
-        links: 
-            - logging-service              
+        # links: 
+        #     - logging-service         
+        networks:
+            viz: 
+                ipv4_address: 172.20.0.2                   
     viz-service:
+        env_file:
+            ./viz-service/.env    
         build: 
             context: .
             dockerfile: ./viz-service/Dockerfile      
         depends_on:
             - logging-service
+        networks:
+            viz: 
+                ipv4_address: 172.20.0.3       
         volumes:
             - ./viz-service/html:/portal-visualizations/  
             - ./common-resources/:/portal-visualizations/public/content-data/            
         environment:
-            MYSQL_DATABASE: annie
-            MYSQL_USER: annie
-            MYSQL_PASSWORD: 'b4Rxx:pW'
-            MYSQL_HOST: "annie.criploulbgnu.us-west-2.rds.amazonaws.com"
-            MYSQL_PORT: 3306
             CONTENT_PATH: './content-data/content/graphs/'
             VIRTUAL_HOST: viz.portal.cssat.org
+            VIRTUAL_HOST_ROOT: portal-visualizations
             # Don't output logs with status code 2XX to stdout
             FLUENTD_STDOUT_FILTER_PATTERN: '\A[^ ]* [^ ]* [^ ] \[[^\]]*\] "\S+(?: +[^\"]*?(?: +\S*)?)?" 2'
         logging:
             driver: fluentd
             options:
-                fluentd-address: docker.for.mac.localhost:24224
+                fluentd-address: 172.20.0.6:24224
                 fluentd-sub-second-precision: "true"
+                fluentd-async-connect: "true"
+                fluentd-retry-wait: 1s
+                fluentd-max-retries: 30
                 tag: docker.viz-service
                 env: FLUENTD_STDOUT_FILTER_PATTERN         
-        links: 
-            - logging-service            
+        # links: 
+        #     - logging-service            
     browse-service:
         build: 
             context: .
             dockerfile: ./browse-service/Dockerfile      
         depends_on:
-            - logging-service
+            - logging-service        
         volumes:
             - ./browse-service/html:/portal-browse/  
             - ./common-resources/:/portal-browse/public/content-data/         
         environment:
             VIRTUAL_HOST: portal.cssat.org
+            VIRTUAL_HOST_ROOT: portal-browse            
             # Don't output logs with status code 2XX to stdout
             FLUENTD_STDOUT_FILTER_PATTERN: '\A[^ ]* [^ ]* [^ ] \[[^\]]*\] "\S+(?: +[^\"]*?(?: +\S*)?)?" 2'
         logging:
             driver: fluentd
             options:
-                fluentd-address: docker.for.mac.localhost:24224
+                fluentd-address: 172.20.0.6:24224
                 fluentd-sub-second-precision: "true"
+                fluentd-async-connect: "true"
+                fluentd-retry-wait: 1s
+                fluentd-max-retries: 30
                 tag: docker.browse-service
                 env: FLUENTD_STDOUT_FILTER_PATTERN      
-        links: 
-            - logging-service      
-    test-service: 
-        build: 
-            context: .
-            dockerfile: ./test-service/Dockerfile      
-        volumes: 
-            - ./test-service/unit/phpunit/:/app/tests
-            - ./browse-service/:/app/browse-service
-            - ./viz-service/:/app/viz-service         
-        stdin_open: true # docker run -i
-        tty: true        # docker run -t
+        # links: 
+        #     - logging-service   
+        networks:
+            viz: 
+                ipv4_address: 172.20.0.4                             
     logging-service:
         build: 
             context: ./logging-service
@@ -95,5 +102,17 @@ services:
             ./logging-service/.env
         ports:
             - '24224:24224'
+        networks:
+            viz: 
+                ipv4_address: 172.20.0.6                
+
 volumes:
     https-portal-data:
+
+networks:
+  viz:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/24

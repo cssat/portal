@@ -1,7 +1,6 @@
 ## Dependencies
 node_modules
 src/.sass-cache
-.vagrant
 
 ## Folders/files that shouldn't be stored
 public/config/local.php
