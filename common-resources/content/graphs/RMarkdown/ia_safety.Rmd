@@ -1,0 +1,143 @@
+```{r, include=FALSE}
+library(pocr)
+library(lubridate)
+library(RODBC)
+library(dplyr)
+library(stringr)
+
+annie <- odbcConnect("test_annie")
+sp_call <- stored_procedure('ia_safety')
+sp_query <- sqlQuery(annie, sp_call)
+clean_query <- cr_clean(sp_query, date.type = 2, select = 'qry_type')
+
+# code for highlights
+
+data_year <- filter(clean_query, qry.type == 0, months.since.screened.in.investigation.assessment == 36) %>% filter(cohort.period == max(cohort.period)) %>% select(cohort.period)
+
+one_year <- filter(clean_query, qry.type == 0, cohort.period == data_year[1,], months.since.screened.in.investigation.assessment == 12)
+two_years <- filter(clean_query, qry.type == 0, cohort.period == data_year[1,], months.since.screened.in.investigation.assessment == 24)
+three_years <- filter(clean_query, qry.type == 0, cohort.period == data_year[1,], months.since.screened.in.investigation.assessment == 36)
+
+# close connection
+odbcCloseAll()
+
+```
+
+{  
+   "title":"Screened-In Re-Reports",
+   "subtitle":"Following an Investigation or Assessment",
+   "img":"",
+   "type":"visualization",
+   "visualizationType":"graph",
+   "tags":[  
+      "safety",
+      "investigations and assessments",
+      "out-of-home",
+      "foster care",
+      "age",
+      "cohort",
+      "county",
+      "race/ethnicity"
+   ],
+   "blurb":"Investigations/assessments that have a subsequent screened-in report.",
+   "slug":"ia-re-reports",
+   "unit":"Percent",
+   "config":{  
+      "table":"sp_ia_safety",
+      "transform":{  
+         "Function":"daterow",
+         "dateField":"Months Since Screened-In Investigation/Assessment",
+         "valueFields":[  
+            "Percent"
+         ],
+         "removeFields":[],
+         "table":"sp_ia_safety"
+      },
+      "controls":[  
+         "qry_type_first_unique_ia_safety",
+         "cohort_year_ia_safety"
+      ],
+      "params":[  
+         "ageSib",
+         "ethnicityCensus",
+         "Ref_Serv_County",
+         "reporter_type",
+         "access_type",
+         "allegation",
+         "finding"
+      ],
+      "dateParams":[],
+      "requiredParams":[],
+      "showAllOthers":true,
+      "returnRowHeaders":[  
+         0,
+         1,
+         2,
+         4,
+         6,
+         8,
+         10,
+         12,
+         14,
+         16
+      ],
+      "returnRowDateHeaders":[],
+      "returnRowControlHeaders":[],
+      "headerNames":[  
+         "&nbsp;",
+         "qry_type*qry_type_first_unique_ia_safety",
+         "Cohort Period*cohort_year_ia_safety",
+         "Age Grouping=ageSib",
+         "Race/Ethnicity",
+         "County=Ref_Serv_County",
+         "Reporter Desc=reporter_type",
+         "Access type desc=access_type",
+         "Allegation=allegation",
+         "Finding=finding"
+      ],
+      "returnRowStart":17,
+      "hideRow":"allEmpty",
+      "chartType":"line",
+      "labels":{  
+         "x":"Months Since Screened-In Investigation/Assessment",
+         "y":"",
+         "yFormat":"##'%"
+      },
+      "numberFormat":{  
+         "fractionDigits":2,
+         "suffix":"%"
+      }
+   }
+}
+
+### Data Highlights
+
+<div class="stat">
+    <h4>`r one_year$months.since.screened.in.investigation.assessment` Months since 1st Investigation</h4>
+    <p>`r round(one_year$percent)`%</p>
+</div>
+
+<div class="stat">
+    <h4>`r two_years$months.since.screened.in.investigation.assessment` Months since 1st Investigation</h4>
+    <p>`r round(two_years$percent)`%</p>
+</div>
+
+<div class="stat">
+    <h4>`r three_years$months.since.screened.in.investigation.assessment` Months since 1st Investigation</h4>
+    <p>`r round(three_years$percent)`%</p>
+</div>
+
+### Summary
+
+This graph follows a cohort of households with screened-in reports of child abuse/neglect to see if they had another screened-in report.
+
+#### See also
+
+- [Investigation & Assessments (Count)](https://portal.cssat.org/visualizations/ia-counts), for total counts of investigations & assessments (i.e., households with screened-in reports).
+
+- [Investigations & Assessments (Rate)](https://portal.cssat.org/visualizations/ia-rates), for
+population-based rates of investigations & assessments (i.e., households with screened-in reports).
+
+### Notes
+
+All households with a screened-in report of concerns for child safety receive a CPS investigation or are assessed for other services.

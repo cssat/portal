@@ -1,0 +1,139 @@
+```{r, include=FALSE}
+library(pocr)
+library(lubridate)
+library(RODBC)
+library(dplyr)
+library(stringr)
+
+con <- odbcConnect("test_annie")
+
+results <- sqlQuery(con, "call sp_mp_placement_care_days_mobility('0')")
+names(results) <- make.names(str_replace_all(tolower(names(results)), '\\(|\\)', ''))
+names(results)[1] = "year"
+
+# data for highlights
+
+highlight = filter(results, region == 0,
+                 cd_movement == 0,
+                 year == max(year)) %>%
+    mutate(rate = round(rate))
+
+# close connection
+odbcCloseAll()
+
+```
+
+{  
+   "title":"Placement Moves",
+   "subtitle":"Moves per 100,000 Care-Days",
+   "img":"",
+   "type":"visualization",
+   "visualizationType":"graph",
+   "tags":[  
+      "permanency",
+      "annual report",
+      "region",
+      "out-of-home",
+      "foster care",
+      "stability",
+      "kin care",
+      "cfsr"
+   ],
+   "keywords":[
+      "mobility"
+   ],
+   "blurb":"Rate at which children changed out-of-home care placements.",
+   "slug":"placement-moves",
+   "unit":"Moves per 100,000 Care-Days",
+   "config":{  
+      "table":"sp_mp_placement_care_days_mobility",
+      "transform":{  
+         "Function":"daterow",
+         "dateField":"Fiscal Year/Year in Out-of-Home Care",
+         "valueFields":[  
+            "Rate"
+         ],
+         "removeFields":[]
+      },
+      "controls":[  
+         "movement_category",
+         "years_in_care",
+         "region"
+      ],
+      "params":[  
+         "dynamicMonthStart"
+      ],
+      "dateParams":[],
+      "requiredParams":[  
+         "dynamicMonthStart"
+      ],
+      "showAllOthers":true,
+      "returnRowHeaders":[  
+         0,
+         1,
+         2,
+         3
+      ],
+      "returnRowDateHeaders":[  
+         0
+      ],
+      "returnRowControlHeaders":[  
+         0,
+         1,
+         2,
+         3
+      ],
+      "headerNames":[  
+         "&nbsp;",
+         "Region*region",
+         "Years in Care*years_in_care",
+         "cd_movement*movement_category"
+      ],
+      "returnRowStart":4,
+      "chartType":"line",
+	  "labels":{  
+         "x":"",
+         "y":""
+      },
+      "numberFormat":{  
+         "fractionDigits":2
+      }
+   }
+}
+### Data Highlights
+
+<div class="stat">
+    <h4>Overall</h4>
+    <p>`r filter(highlight, years.in.care == 0)$rate`</p>
+</div>
+
+<div class="stat">
+    <h4>First Year in Care</h4>
+    <p>`r filter(highlight, years.in.care == 1)$rate`</p>
+</div>
+
+<div class="stat">
+    <h4>Second Year in Care</h4>
+    <p>`r filter(highlight, years.in.care == 2)$rate`</p>
+</div>
+
+### Summary
+
+This graph examines the rate of placement moves for children in out-home-care based on their length of stay in out-of-home care and by placement move type. It can be interpeted as the probability that a child changed placement on a given day in care (if divided by 100,000).
+
+#### Questions this graph can answer
+
+- How has the length of time children spend in out-of-home care been related to the rate of placement moves?
+
+- How has the rate of placement moves changed over time?
+
+#### See also
+
+- [Placements in Family Settings](https://portal.cssat.org/visualizations/family-settings), for the number children placed in family settings.
+
+### Notes
+
+Rates have been calculated per 100,000 care-days. A care-day is one day that a child spends in out-of-home care. Fourteen care-days could either be two weeks that one child spent in out-of-home care, or 1 day that 14 children spent in out-of-home care.
+
+Moves from one living situation to another are counted for children placed in out-of-home care. The initial placement into out-of-home care, return home and placement in another permanent home are not considered moves.  Temporary stays lasting less than seven days, such as weekend respite or time in a hospital, or placement in a 'non-child welfare placement,' such as a juvenile detention center, are not counted as placement moves
+

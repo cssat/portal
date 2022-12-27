@@ -1,0 +1,151 @@
+{  
+   "title":"Entering Out-of-Home Care (Rate)",
+   "subtitle":"During a Year or Quarter",
+   "img":"",
+   "type":"visualization",
+   "visualizationType":"graph",
+   "tags":[  
+      "out-of-home",
+      "foster care",
+      "county",
+      "age",
+      "race/ethnicity"
+   ],
+   "keywords":[
+      "enter",
+      "entering",
+      "entry"
+   ],
+   "blurb":"The total number of out-of-home care cases per 1,000 children during a year or quarter.",
+   "slug":"ooh-entry-rates",
+   "unit":"Out-of-Home Care Cases per 1,000 Children",
+   "config":{  
+      "table":"sp_ooh_flow_entries_rates",
+      "transform":{  
+         "Function":"daterow",
+         "dateField":"Cohort Period",
+         "valueFields":[  
+            "Rate of Entries"
+         ],
+         "removeFields":[]
+      },
+      "controls":[  
+         "qry_type_entries",
+         "date_type_cohort"
+      ],
+      "params":[  
+         "dynamicMonthStart",
+         "ageCensus",
+         "ethnicityCensus",
+         "gender",
+         "initSetng",
+         "longSetng",
+         "removalCounty",
+         "ooh_los",
+         "nbr_placement",
+         "ihs_services_ooh",
+         "reporter_type",
+         "access_type",
+         "allegation",
+         "finding",
+         "dependency_cd"
+      ],
+      "dateParams":[],
+      "requiredParams":[  
+         "dynamicMonthStart"
+      ],
+      "showAllOthers":true,
+      "returnRowHeaders":[  
+         0,
+         1,
+         4,
+         6,
+         8,
+         10,
+         12,
+         14,
+         16,
+         18,
+         20,
+         22,
+         24,
+         26,
+         28,
+         30
+      ],
+      "returnRowDateHeaders":[  
+         0
+      ],
+      "returnRowControlHeaders":[  
+         1
+      ],
+      "headerNames":[  
+         "&nbsp;",
+         "qry_type_poc1*qry_type_entries",
+         "Age Grouping=ageCensus",
+         "Gender=gender",
+         "Race/Ethnicity",
+         "Initial Placement=initSetng",
+         "Longest Placement=longSetng",
+         "County=removalCounty",
+         "Dependency=dependency_cd",
+         "Length of Service Desc=ooh_los",
+         "Placement Count Desc=nbr_placement",
+         "In-Home Service Desc=ihs_services_ooh",
+         "Reporter Desc=reporter_type",
+         "Access type desc=access_type",
+         "Allegation=allegation",
+         "Finding=finding"
+      ],
+      "returnRowStart":31,
+      "hideRow":"allEmpty",
+      "chartType":"line",
+      "labels":{  
+         "x":"",
+         "y":""
+      },
+      "numberFormat":{  
+         "fractionDigits":2
+      }
+   }
+}
+
+### Data Highlights
+
+<div class="stat">
+    <h4>Recent: 2019</h4>
+    <p>3.3</p>
+</div>
+
+<div class="stat">
+    <h4>Low: 2019</h4>
+    <p>3.3</p>
+</div>
+
+<div class="stat">
+    <h4>High: 2000</h4>
+    <p>5.4</p>
+</div>
+
+### Summary
+
+This graph represents the yearly or quarterly number of children who entered out-of-home care per 1,000 children in the general population.
+
+#### Questions this graph can answer
+
+- What was the rate, by child's age, races, etc., that children entered out-of-home care in 2014? 
+
+- What year had the highest rate of entry into out-of-home care since the year 2000?
+
+#### See also
+
+- [Children Entering Out-of-Home Care (Count)](https://portal.cssat.org/visualizations/ooh-entry-counts), for this data in terms of counts.
+
+- [Children in Out-of-Home Care (Rate)](https://portal.cssat.org/visualizations/ooh-rates), for the rate of children in out-of-home care at a particular point in time.
+
+### Notes
+
+All episodes of out-of-home care have been included by default. Use the advanced filter, *duration of out-of-home stay*, to exclude short episodes. 
+
+
+

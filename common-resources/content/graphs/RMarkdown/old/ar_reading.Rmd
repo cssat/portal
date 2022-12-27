@@ -1,0 +1,111 @@
+```{r, include=FALSE}
+library(pocr)
+library(lubridate)
+library(RODBC)
+library(dplyr)
+library(stringr)
+
+con <- odbcConnect("test_annie")
+
+results <- sqlQuery(con, "call sp_mp_lit3_perc();")
+names(results) <- make.names(str_replace_all(tolower(names(results)), '\\(|\\)|:', ''))
+
+# code for highlights
+
+recent_results <- filter(results, grade.year == max(grade.year), fl_disability == 0)
+
+# close connection
+odbcCloseAll()
+
+```
+{  
+   "title":"Third Grade Reading",
+   "subtitle":"Percent passing literacy test",
+   "img":"",
+   "type":"visualization",
+   "visualizationType":"graph",
+   "tags":[  
+      "education",
+      "annual report",
+      "out-of-home",
+      "well-being",
+      "foster care"
+   ],
+   "blurb":"Percentage of children who met third grade literacy standards.",
+   "slug":"literacy",
+   "unit":"Percent",
+   "config":{  
+      "table":"sp_mp_lit3_perc",
+      "controls":[  
+         "third_grade_year",
+         "disability"
+      ],
+      "params":[],
+      "dateParams":[],
+      "requiredParams":[],
+      "showAllOthers":true,
+      "returnRowHeaders":[  
+         0,
+         1
+      ],
+      "returnRowDateHeaders":[],
+      "returnRowControlHeaders":[  
+         0,
+         1
+      ],
+      "headerNames":[  
+         "Grade Year=third_grade_year",
+         "fl_disability*disability"
+      ],
+      "hideRow":"allEmpty",
+      "columnClusterSize":3,
+      "returnRowStart":2,
+      "chartType":"column",
+      "labels":{  
+         "x":"",
+         "y":"",
+         "yFormat":"##'%"
+      },
+      "numberFormat":{  
+         "fractionDigits":2,
+         "suffix":"%"
+      }
+   }
+}
+
+### Data Highlights
+
+<div class="stat">
+    <h4>General Population</h4>
+    <p>`r round(recent_results$not.in.out.of.home.care)`%</p>
+</div>
+
+<div class="stat">
+    <h4>Free or Reduced Lunch</h4>
+    <p>`r round(recent_results$not.in.care.receiving.free.or.reduced.price.lunch)`%</p>
+</div>
+
+<div class="stat">
+    <h4>Out-of-Home</h4>
+    <p>`r round(recent_results$in.out.of.home.care)`%</p>
+</div>
+
+### Summary
+
+This graph examines the percentage of children who met third grade literacy proficiency standards. The data display information for youth who spent time in out-of-home care, youth who were not in out-of-home care but received free or reduced lunch (a measure for poverty) and youth who did not receive a free or reduced lunch and were not in out-of-home care.  
+
+#### Questions this graph can answer
+
+- How have reading test scores for children who spent time in out-of-home care compared with the scores of children who received free or reduced price lunches?
+
+- How has having a disability impacted third grade literacy proficiency?
+
+#### See also
+
+- [College Enrollment](https://portal.cssat.org/visualizations/postsec-enrollment), for the percentage of high school who graduated enrolling in post-secondary education.
+
+- [College Completion](https://portal.cssat.org/visualizations/postsec-completion), for the percentage of students who completed post-secondary education within 4 years of graduation.
+
+### Notes
+
+For additional information on literacy, see the [Washington State Comprehensive Literacy Plan: Birth to Grade 12](http://www.k12.wa.us/ela/pubdocs/clp.pdf).

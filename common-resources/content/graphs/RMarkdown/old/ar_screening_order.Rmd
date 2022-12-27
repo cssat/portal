@@ -1,0 +1,175 @@
+```{r, include=FALSE}
+library(pocr)
+library(lubridate)
+library(RODBC)
+library(dplyr)
+library(stringr)
+
+con <- odbcConnect("test_annie")
+
+results <- sqlQuery(con, "call sp_mp_rate_referrals_scrn_in_order_ts()")
+names(results) <- make.names(str_replace_all(tolower(names(results)), '\\(|\\)', ''))
+
+head(results)
+
+# code for highlights
+
+zero_reports <- filter(results, region == 0, order == 0, month.year.of.ordered.screened.in.report == max(month.year.of.ordered.screened.in.report))$scatterplot.actual.values
+one_report <- filter(results, region == 0, order == 1, month.year.of.ordered.screened.in.report == max(month.year.of.ordered.screened.in.report))$scatterplot.actual.values
+two_reports <- filter(results, region == 0, order == 2, month.year.of.ordered.screened.in.report == max(month.year.of.ordered.screened.in.report))$scatterplot.actual.values
+
+# close connection
+odbcCloseAll()
+```
+{  
+   "title":"Screened-In Reports by Prior Screened-In Reports",
+   "subtitle":"Per 1,000 Households with a Report",
+   "img":"",
+   "type":"visualization",
+   "visualizationType":"graph",
+   "tags":[  
+      "safety",
+      "annual report",
+      "maltreatment",
+      "region",
+      "cps"
+   ],
+   "keywords": [
+      "referrals",
+      "intakes",
+      "screening",
+	  "safety",
+      "out-of-home",
+      "foster care"
+   ],
+   "blurb":"Rate of reports that were screened-in, with priors.",
+   "slug":"screening-rate-order",
+   "unit":"Screened-In Reports per 1,000 Reports",
+   "config":{  
+      "table":"sp_mp_rate_referrals_scrn_in_order_ts",
+      "transform":{  
+         "Function":"daterow",
+         "dateField":"Month/Year of Ordered Screened-In Report",
+         "valueFields":[  
+            "Scatterplot (Actual Values)",
+            "Trend Line (Seasonally Adjusted)"
+         ],
+         "removeFields":[]
+      },
+      "controls":[  
+         "region",
+         "order"
+      ],
+      "params":[],
+      "dateParams":[],
+      "requiredParams":[],
+      "showAllOthers":true,
+      "returnRowHeaders":[  
+         0,
+         1,
+         2
+      ],
+      "returnRowDateHeaders":[  
+         0
+      ],
+      "returnRowControlHeaders":[  
+         1,
+         2
+      ],
+      "headerNames":[  
+         "&nbsp;",
+         "Region*region",
+         "Order*order"
+      ],
+      "returnRowStart":3,
+      "hideRow":"allEmpty",
+      "columnClusterSize":2,
+      "numberFormat":[  
+         {  
+            "fractionDigits":2
+         }
+      ],
+      "multicharts":{  
+         "Trend-Line":[  
+            {  
+               "chartType":"line",
+               "chartId":"chart1",
+               "labels":{  
+                  "x":"",
+                  "y":"",
+                  "yFormat":"#,##0"
+               },
+               "hideColumns":[  
+                  0
+               ]
+            }
+         ],
+         "Trend-Line-with-Scatterplot":[  
+            {  
+               "chartType":"combo",
+               "chartId":"chart1",
+               "labels":{  
+                  "x":"",
+                  "y":""
+               },
+               "hideColumns":[]
+            }
+         ],
+         "Scatterplot":[  
+            {  
+               "chartType":"scatterChart",
+               "chartId":"chart1",
+               "labels":{  
+                  "x":"",
+                  "y":"",
+                  "yFormat":"#,##0"
+               },
+               "hideColumns":[  
+                  1
+               ]
+            }
+         ]
+      }
+   }
+}
+
+### Data Highlights
+
+<div class="stat">
+    <h4>No Prior Reports</h4>
+    <p>`r round(zero_reports)`</p>
+</div>
+
+<div class="stat">
+    <h4>One Prior Report</h4>
+    <p>`r round(one_report)`</p>
+</div>
+
+<div class="stat">
+    <h4>Two Prior Reports</h4>
+    <p>`r round(two_reports)`</p>
+</div>
+
+### Summary
+
+Households with previous screened-in reports are more likely to be screened-in again; this graph shows how much the screening rate increased. The screening rate is the rate at which public reports of concern for child safety made to Children's Administration are screened-in for a CPS investigation or assessed for receipt of other services.
+
+#### Questions this graph can answer
+
+- How has the screening rate differed for households with prior screened-in reports?
+
+#### See also
+
+- [Report Rate](https://portal.cssat.org/visualizations/report-rate), for the overall rate of reports.
+- [Placement Rate](https://portal.cssat.org/visualizations/placement-rate), for the rate at which screened-in reports resulted in out-of-home placement.
+
+### Notes
+
+All screened-in reports receive services; depending on the details of the case the service might be a CPS investigation, a CPS risk assessment, an alternative response such as [Family Assessment Response (FAR)](http://partnersforourchildren.org/resources/glossary) or Family Reconciliation Services (FRS).
+
+The rate of screened-in reports with no (zero) prior screened-in reports was calculated by dividing the number of households with a first report in a given month by the number of households who had no prior reports at the start of the month.
+
+The rate of screened-in reports with one prior screened-in report was calculated by dividing those households experiencing a second report in a given month by the number of households who had exactly one report prior to the start of the month, and so on.
+
+Reports were only counted if there had been more than 48 hours since the previous report about the same household.
+

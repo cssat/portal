@@ -1,0 +1,166 @@
+```{r, include=FALSE}
+library(pocr)
+library(lubridate)
+library(RODBC)
+library(dplyr)
+library(stringr)
+
+con <- odbcConnect("test_annie")
+
+results <- sqlQuery(con, "call sp_mp_rate_referrals_order_ts()")
+names(results) <- make.names(str_replace_all(tolower(names(results)), '\\(|\\)', ''))
+results = mutate(results, scatterplot.actual.values = round(scatterplot.actual.values, 1))
+
+
+# code for highlights
+
+zero_reports <- filter(results, region == 0, order == 0, month.year.of.ordered.report == max(month.year.of.ordered.report))$scatterplot.actual.values
+one_report <- filter(results, region == 0, order == 1, month.year.of.ordered.report == max(month.year.of.ordered.report))$scatterplot.actual.values
+two_reports <- filter(results, region == 0, order == 2, month.year.of.ordered.report == max(month.year.of.ordered.report))$scatterplot.actual.values
+
+# close connection
+odbcCloseAll()
+```
+{  
+   "title":"Reports by Prior Reports (Rate)",
+   "subtitle":"Per 1,000 Households with Zero, One, or Two Prior Reports",
+   "img":"",
+   "type":"visualization",
+   "visualizationType":"graph",
+   "tags":[  
+      "safety",
+      "annual report",
+      "maltreatment",
+      "region",
+      "cps"
+   ],
+   "keywords":[
+      "intakes",
+      "referrals"
+   ],
+   "blurb":"Public reports of concern for child safety, by number of prior reports.",
+   "slug":"report-rate-priors",
+   "unit":"Reports per 1,000 Households with Children",
+   "config":{  
+      "table":"sp_mp_rate_referrals_order_ts",
+      "transform":{  
+         "Function":"daterow",
+         "dateField":"Month/Year of Ordered Report",
+         "valueFields":[  
+            "Scatterplot (Actual Values)",
+            "Trend Line (Seasonally Adjusted)"
+         ],
+         "removeFields":[]
+      },
+      "controls":[  
+         "region",
+         "order"
+      ],
+      "params":[],
+      "dateParams":[],
+      "requiredParams":[],
+      "showAllOthers":true,
+      "returnRowHeaders":[  
+         0,
+         1,
+         2
+      ],
+      "returnRowDateHeaders":[  
+         0
+      ],
+      "returnRowControlHeaders":[  
+         1,
+         2
+      ],
+      "headerNames":[  
+         "&nbsp;",
+         "Region*region",
+         "Order*order"
+      ],
+      "returnRowStart":3,
+      "hideRow":"allEmpty",
+      "columnClusterSize":2,
+      "numberFormat":[  
+         {  
+            "fractionDigits":2
+         }
+      ],
+      "multicharts":{  
+         "Trend-Line":[  
+            {  
+               "chartType":"line",
+               "chartId":"chart1",
+               "labels":{  
+                  "x":"",
+                  "y":""
+               },
+               "hideColumns":[  
+                  0
+               ]
+            }
+         ],
+         "Trend-Line-with-Scatterplot":[  
+            {  
+               "chartType":"combo",
+               "chartId":"chart1",
+               "labels":{  
+                  "x":"",
+                  "y":""
+               },
+               "hideColumns":[]
+            }
+         ],
+         "Scatterplot":[  
+            {  
+               "chartType":"scatterChart",
+               "chartId":"chart1",
+               "labels":{  
+                  "x":"",
+                  "y":""
+               },
+               "hideColumns":[  
+                  1
+               ]
+            }
+         ]
+      }
+   }
+}
+### Data Highlights
+
+<div class="stat">
+    <h4>No Prior Reports</h4>
+    <p>`r zero_reports`</p>
+</div>
+
+<div class="stat">
+    <h4>One Prior Report</h4>
+    <p>`r one_report`</p>
+</div>
+
+<div class="stat">
+    <h4>Two Prior Reports</h4>
+    <p>`r two_reports`</p>
+</div>
+
+### Summary
+
+This graph shows the rate of reports of concern for child safety made to Children's Administration. All calls to the child welfare system - those made by community members and those made by mandated reporters - were counted. (See *Notes* below for how we determined which calls regarded child safety concerns.)
+
+#### Questions this graph can answer
+
+- How has the risk that a household will be reported to Children's Administration for a CPS investigation or other services changed based on a history of prior reports?
+
+#### See also
+
+- [Screening Rate](https://portal.cssat.org/visualizations/screening-rate), for the rate at which child safety reports were screened-in for services.
+
+### Notes:
+
+Reports were only counted if there had been more than 48 hours since the previous report about the same household.
+
+We excluded any calls that were classed as Department of Licensing Resources (DLR). We also excluded a handful of other rare categories that are not usually associated with safety concerns including *Information Only*, *Home Study*, and *Family Voluntary Service*.
+
+The rate of the reports with no (zero) prior reports was calculated by dividing the number of households with a first report in a given month by the number of households who had no prior reports at the start of the month.
+
+The rate of the reports with one prior report was calculated by dividing those households experiencing a second report in a given month by the number of households who had exactly one report prior to the start of the month. This approach continues similarly for additional prior reports.

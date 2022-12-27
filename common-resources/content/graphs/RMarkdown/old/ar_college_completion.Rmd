@@ -1,0 +1,109 @@
+```{r, include=FALSE}
+library(pocr)
+library(lubridate)
+library(RODBC)
+library(dplyr)
+library(stringr)
+
+con <- odbcConnect("test_annie")
+
+results <- sqlQuery(con, "call sp_mp_post_secondary_completion_pvt();")
+names(results) <- make.names(str_replace_all(tolower(names(results)), '\\(|\\)|:', ''))
+
+# code for highlights
+
+recent_results <- slice(results, n())
+
+# close connection
+odbcCloseAll()
+
+```
+{  
+   "title":"Post-Secondary Completion",
+   "subtitle":"Within Four Years of High School Graduation",
+   "img":"",
+   "type":"visualization",
+   "visualizationType":"graph",
+   "tags":[  
+      "education",
+      "annual report",
+      "region",
+      "out-of-home",
+      "foster care",
+      "well-being"
+   ],
+   "keywords":[
+      "college"
+   ],
+   "blurb":"Percent of students who complete a post-secondary degree within four years.",
+   "slug":"postsec-completion",
+   "unit":"Percent",
+   "config":{  
+      "table":"sp_mp_post_secondary_completion_pvt",
+      "controls":[  
+         "cohort_year_grad_college"
+      ],
+      "params":[],
+      "dateParams":[],
+      "requiredParams":[],
+      "showAllOthers":true,
+      "returnRowHeaders":[  
+         0
+      ],
+      "returnRowDateHeaders":[],
+      "returnRowControlHeaders":[  
+         0
+      ],
+      "headerNames":[  
+         "Cohort Period=cohort_year_grad_college"
+      ],
+      "hideRow":"anyEmpty",
+      "chartType":"column",
+      "columnClusterSize":3,
+      "returnRowStart":1,
+      "labels":{  
+         "x":"",
+         "y":"",
+         "yFormat":"##'%"
+      },
+      "numberFormat":{  
+         "fractionDigits":2,
+         "suffix":"%"
+      }
+   }
+}
+
+### Data Highlights
+
+<div class="stat">
+    <h4>General Population</h4>
+    <p>`r round(recent_results$not.in.out.of.home.care)`%</p>
+</div>
+
+<div class="stat">
+    <h4>Free or Reduced Lunch</h4>
+    <p>`r round(recent_results$not.in.care.receiving.free.or.reduced.price.lunch)`%</p>
+</div>
+
+<div class="stat">
+    <h4>Out-of-Home</h4>
+    <p>`r round(recent_results$in.out.of.home.care)`%</p>
+</div>
+
+### Summary
+
+This graph examines the percentage of students who complete a degree at a public post-secondary education institution within 4 years of completing high school.
+
+#### Questions this graph can answer
+
+- How has the percentage of youth who completed a post-secondary degree differed between youth who did and did not spend time in out-of-home care?
+
+#### See also
+
+- [Third Grade Reading](https://portal.cssat.org/visualizations/literacy), for the percentage of children who met third grade literacy proficiency.
+
+- [College Enrollment](https://portal.cssat.org/visualizations/postsec-enrollment), for the percentage of high school graduates who enrolled in post-secondary education.
+
+### Notes
+
+Public post-secondary education institutions includes 2-year and 4-year colleges and universities in Washington State. Any individual who spent time in out-of-home care before completing secondary education has been included in the out-of-home care group.

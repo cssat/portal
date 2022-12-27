@@ -1,0 +1,75 @@
+{
+    "title": "Age When Entering Care",
+    "subtitle": "Percent of Entries by State (2016)",
+    "blurb": "Age distribution of children who were placed in out-of-home care across the country.",
+    "type": "visualization",
+    "visualizationType": "graph",
+    "tags": [
+        "entry",
+        "age",
+        "national"
+    ],
+    "keywords": [
+        "spaghettiplot",
+        "usa",
+        "afcars"
+    ],
+    "unit": "Percent of Entries into Out-of-Home Care",
+    "slug": "entry-rates",
+    "config": {
+        "fileName": "entered-care",
+        "yLabel": "Rate of Entry",
+        "xLabel": "Age",
+        "defaultName": "Washington",
+        "rankTextBegin": "ranks",
+        "rankTextMiddle": "for children under 1 entering care",
+        "rankTextEnd": "for children age 17"
+    }
+}
+
+### Data Highlights
+
+<div class="stat">
+            <h4>WA Out-of-Home Entries Under 1 Year Old</h4>
+            <p>26.7</p>
+</div>
+
+<div class="stat">
+            <h4>WA Rank for Percent of Infants</h4>
+            <p>#1</p>
+</div>
+
+### Summary
+
+Across the U.S., most of the children entering out-of-home care are quite young. In fact, infants are almost always the most represented age group. In most states there is a second "hump" in the age distribution for late adolescents  entering care. 
+
+Washington has a relatively high percentage of infants, and a correspondingly low percentage of adolescents entering out-of-home care. 
+
+#### Questions this graph can answer
+
+- Which states had greater proportions of adolescents entering out-of-home care?
+
+- What have been the most common ages of children who entered out-of-home care, and how has this differed by from state to state?
+
+#### See also
+
+- [Permanency Counts](https://portal.cssat.org/visualizations/permanency-counts), for permanency outcomes and the ages of children who exited out-of-home care.
+
+### Notes
+
+When looking at this visualization keep in mind that the line for *each state* adds up to 100%. The visualization does not compare the *number of children* who entered out-of-home care by state, rather it compares of the *age distribution of children* who entered care by state.
+
+The visualization was adapted from and inspired by Nathan Yau's [visualization of life expectancy by country](http://projects.flowingdata.com/life-expectancy/).
+
+#### Data source
+
+These data comes from the
+National Child Abuse and Neglect Data System (NCANDS) Child File, which is part of
+Cornell University's [National Data Archive on Child Abuse and Neglect (NDACAN)](https://bctr.cornell.edu/projects/national-data-archive-on-child-abuse-and-neglect/)
+and the US Census Bureau,
+via the Annie E. Casey Foundation's [Kids Count Data Center](http://datacenter.kidscount.org/).
+
+The collector of the original data, the funding agency, NDACAN, Cornell University, and the agents or employees of these institutions bear no responsibility for analyses or interpretations presented here.
+
+
+

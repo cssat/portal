@@ -1,0 +1,243 @@
+```{r, include=FALSE}
+library(pocr)
+library(lubridate)
+library(RODBC)
+library(dplyr)
+library(stringr)
+
+con <- odbcConnect("test_annie")
+
+results <- sqlQuery(con, "call sp_mp_rate_referral_ts()")
+names(results) <- make.names(str_replace_all(tolower(names(results)), '\\(|\\)', ''))
+
+results <- filter(results, region == 0, access.type == 0) %>% select(month.year.of.report, scatterplot.actual.values)
+
+# code for label and stat in json
+
+# most recent data
+recent_date <- pretty_date(filter(results, month.year.of.report == max(month.year.of.report))$month.year.of.report)
+recent_dat <- filter(results, month.year.of.report == max(month.year.of.report)) %>% select(scatterplot.actual.values)
+
+# lowest rate
+lowest_date <- pretty_date(filter(results, scatterplot.actual.values == min(scatterplot.actual.values))$month.year.of.report)
+lowest_dat <- filter(results, scatterplot.actual.values == min(scatterplot.actual.values)) %>% select(scatterplot.actual.values)
+
+# highest rate
+highest_date <- pretty_date(filter(results, scatterplot.actual.values == max(scatterplot.actual.values))$month.year.of.report)
+highest_dat <- filter(results, scatterplot.actual.values == max(scatterplot.actual.values)) %>% select(scatterplot.actual.values)
+
+# close connection
+odbcCloseAll()
+```
+{  
+   "title":"Reports (Rate)",
+   "subtitle":"Per 1,000 Households with Children",
+   "img":"ar-safety-reports.png",
+   "type":"visualization",
+   "visualizationType":"graph",
+   "tags":[
+      "safety",
+      "region",
+      "maltreatment",
+      "annual report",
+      "region",
+      "cps"
+   ],
+   "keywords": [
+      "intakes",
+      "referrals"
+   ],
+   "blurb":"Public reports of concern for child safety.",
+   "slug":"report-rate",
+   "unit":"Reports per 1,000 Households with Children",
+   "config":{  
+      "table":"sp_mp_rate_referral_ts",
+      "transform":{  
+         "Function":"daterow",
+         "dateField":"Month/Year of Report",
+         "valueFields":[  
+            "Scatterplot (Actual Values)",
+            "Trend Line (Seasonally Adjusted)"
+         ],
+         "removeFields":[]
+      },
+      "controls":[  
+         "region",
+         "access_type_mp"
+      ],
+      "params":[],
+      "dateParams":[],
+      "requiredParams":[],
+      "showAllOthers":true,
+      "returnRowHeaders":[  
+         0,
+         1,
+         2
+      ],
+      "returnRowDateHeaders":[  
+         0
+      ],
+      "returnRowControlHeaders":[  
+         1,
+         2
+      ],
+      "headerNames":[  
+         " ",
+         "Region*region",
+         "Access Type*access_type_mp"
+      ],
+      "returnRowStart":3,
+      "hideRow":"allEmpty",
+      "columnClusterSize":2,
+      "numberFormat":[  
+         {  
+            "fractionDigits":2
+         }
+      ],
+      "multicharts":{  
+         "Trend-Line":[  
+            {  
+               "chartType":"line",
+               "chartId":"chart1",
+               "labels":{  
+                  "x":"",
+                  "y":""
+               },
+               "hideColumns":[  
+                  0
+               ]
+            }
+         ],
+         "Trend-Line-with-Scatterplot":[  
+            {  
+               "chartType":"combo",
+               "chartId":"chart1",
+               "labels":{  
+                  "x":"",
+                  "y":""
+               },
+               "hideColumns":[]
+            }
+         ],
+         "Scatterplot":[  
+            {  
+               "chartType":"scatterChart",
+               "chartId":"chart1",
+               "labels":{  
+                  "x":"",
+                  "y":""
+               },
+               "hideColumns":[  
+                  1
+               ]
+            }
+         ]
+      }
+   }
+}
+
+### Data Highlights
+
+<div class="stat">
+    <h4>Recent: `r recent_date`</h4>
+    <p>`r round(recent_dat, 1)`</p>
+</div>
+
+<div class="stat">
+    <h4>Low: `r lowest_date`</h4>
+    <p>`r round(lowest_dat, 1)`</p>
+</div>
+
+<div class="stat">
+    <h4>High: `r highest_date`</h4>
+    <p>`r round(highest_dat, 1)`</p>
+</div>
+
+### Summary
+
+This graph shows the rate of reports of concern for child safety made to Children's Administration. All calls to the child welfare system - those made by community members and those made by mandated reporters - have been counted. (See *Notes* below for how we determine if a call is regarding child safety concerns.)
+
+#### Questions this graph can answer
+
+- Has the rate of reports of child safety concerns made to Children's Administration varied over time?
+- Has per-capita reporting of child abuse and neglect varied across Washington State?
+
+#### See also
+
+- [Screening Rate](https://portal.cssat.org/visualizations/screening-rate), for the rate of reports of child safety concerns that were screened-in for services.
+
+#### Notes:
+
+Reports were only counted if there had been more than 48 hours since the previous report about the same household.
+
+We excluded calls that were not likely to be associated with concerns about child safety, such as those classified as Department of Licensing Resources, Information Only, Home Study, and Family Voluntary Service.
+
+```{r, include = FALSE, eval = FALSE}
+# From the create statement for `prtl.vw_referrals_grp`, it looks like all of the following are excluded:
+"tx_spvr_rsn not in (
+     '*INVALID*'
+	,'Failed'
+	,'Provider Infraction'
+	,'Information Only'
+	,'Child Fatality-DLR/DEL Related',
+	'Child Fatality',
+	'LE Placement Request - Youth not Placed',
+	'Unborn Victim',
+	'Private Adoption - ASP',
+	'-',
+	'Allegation documented in previous intake',
+	'Re-Open Closed Case',
+	'Home Study',
+	'Family Voluntary Services',
+	'Adoption - ICAMA',
+	'ICPC'
+)"
+
+
+# I think this could use an audit.
+
+"select distinct TX_SPVR_RSN
+from INTAKE_ATTRIBUTE_DIM
+where tx_spvr_rsn not in (
+    '*INVALID*'
+    ,'Failed'
+    ,'Provider Infraction'
+    ,'Information Only'
+    ,'Child Fatality-DLR/DEL Related',
+    'Child Fatality',
+    'LE Placement Request - Youth not Placed',
+    'Unborn Victim',
+    'Private Adoption - ASP',
+    '-',
+    'Allegation documented in previous intake',
+    'Re-Open Closed Case',
+    'Home Study',
+    'Family Voluntary Services',
+    'Adoption - ICAMA',
+    'ICPC')"
+
+# yields
+
+# Alternate Intervention
+# Anonymous Referrer-Risk Low
+# Child Family Welfare Services
+# CPS-FAR
+# CPS-Investigation
+# CPS-Risk Only
+# DLR/CPS-Investigation
+# DLR/CPS-Risk Only
+# Extended Foster Care Services
+# Family Reconciliation Services
+# Investigation
+# No specific CA/N allegation or Risk
+# Other
+# Referral created in Error
+# Referred to Tribal Jurisdiction
+# Risk Only
+# Third Party-Referred to Law Enforcement
+# Victim move out of Subject home
+
+# So why exclude 'Failed' or '*INVALID*' but not 'Referral created in Error'? FVS vs FRS? Extended Foster Care?
+
+```
+

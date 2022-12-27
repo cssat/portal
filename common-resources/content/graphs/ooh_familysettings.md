@@ -1,0 +1,206 @@
+{  
+   "title":"Placements in Family Settings",
+   "subtitle":"On the First Day of the Year",
+   "img":"",
+   "type":"visualization",
+   "visualizationType":"graph",
+   "tags":[
+      "well-being",
+      "out-of-home",
+      "kin care",
+      "foster care",
+      "age",
+      "county",
+      "race/ethnicity"
+   ],
+   "blurb":"Children placed in family (and non-family) settings on the first day of the year.",
+   "slug":"family-settings",
+   "unit":"Percent",
+   "config":{  
+      "table":"sp_ooh_wb_familysettings",
+      "transform":{  
+         "Function":"daterow",
+         "dateField":"Date",
+         "valueFields":[  
+            "Family Setting (State Foster Home)",
+            "Family Setting (Private Foster Home)",
+            "Family Setting (Kin Placement)",
+            "Non-Family Setting"
+         ],
+         "removeFields":[]
+      },
+      "controls":[  
+         "qry_type_first_all"
+      ],
+      "params":[  
+         "dynamicMonthStart",
+         "pitAge",
+         "ethnicityCensus",
+         "gender",
+         "initSetng",
+         "longSetng",
+         "pitCounty",
+         "ooh_los",
+         "nbr_placement",
+         "ihs_services_ooh",
+         "reporter_type",
+         "access_type",
+         "allegation",
+         "finding",
+         "dependency_cd"
+      ],
+      "dateParams":[],
+      "requiredParams":[  
+         "dynamicMonthStart"
+      ],
+      "showAllOthers":true,
+      "returnRowHeaders":[  
+         0,
+         1,
+         3,
+         5,
+         7,
+         9,
+         11,
+         13,
+         15,
+         17,
+         19,
+         21,
+         23,
+         25,
+         27,
+         29
+      ],
+      "returnRowDateHeaders":[  
+         0
+      ],
+      "returnRowControlHeaders":[  
+         1
+      ],
+      "headerNames":[  
+         "&nbsp;",
+         "qry_type_poc1_first_all*qry_type_first_all",
+         "Age Grouping=pitAge",
+         "Race/Ethnicity=ethnicityCensus",
+         "Gender=gender",
+         "Initial Placement=initSetng",
+         "Longest Placement=longSetng",
+         "County=pitCounty",
+         "Dependency=dependency_cd",
+         "Length of Service Desc=ooh_los",
+         "Placement Count Desc=nbr_placement",
+         "In-Home Service Desc=ihs_services_ooh",
+         "Reporter Desc=reporter_type",
+         "Access type desc=access_type",
+         "Allegation=allegation",
+         "Finding=finding"
+      ],
+      "returnRowStart":30,
+      "hideRow":"allEmpty",
+      "columnClusterSize":4,
+      "chartType":"line",
+      "labels":{  
+         "x":"",
+         "y":"",
+         "yFormat":"##'%"
+      },
+      "multicharts":{  
+         "Overview":[  
+            {  
+               "labels":{  
+                  "x":"",
+                  "y":""
+               }
+            }
+         ],
+         "Family-Setting-_pState-Foster-Home_P":[  
+            {  
+               "labels":{  
+                  "x":"",
+                  "y":""
+               },
+               "hideColumns":[  
+                  1,
+                  2,
+                  3
+               ]
+            }
+         ],
+         "Family-Setting-_pPrivate-Foster-Home_P":[  
+            {  
+               "labels":{  
+                  "x":"",
+                  "y":""
+               },
+               "hideColumns":[  
+                  0,
+                  2,
+                  3
+               ]
+            }
+         ],
+         "Family-Setting-_pKin-Placement_P":[  
+            {  
+               "labels":{  
+                  "x":"",
+                  "y":""
+               },
+               "hideColumns":[  
+                  0,
+                  1,
+                  3
+               ]
+            }
+         ],
+         "Non_-Family-Setting":[  
+            {  
+               "labels":{  
+                  "x":"",
+                  "y":""
+               },
+               "hideColumns":[  
+                  0,
+                  1,
+                  2
+               ]
+            }
+         ]
+      }
+   }
+}
+
+### Data Highlights
+
+<div class="stat">
+    <h4>Foster Home Setting</h4>
+    <p>50%</p>
+</div>
+
+<div class="stat">
+    <h4>Kin Placement</h4>
+    <p>44%</p>
+</div>
+
+<div class="stat">
+    <h4>Non-Family Setting</h4>
+    <p>6%</p>
+</div>
+
+### Summary
+
+This graph shows the percentage of children in different placement settings on the first day of each year. There are three types of *family settings*: kinship care, state-licensed foster homes, and privately-licensed foster homes. *Non-family settings* includes shelter care and group care.
+
+#### Questions this graph can answer
+
+- What percentage of children in out-of-home-care were in a kinship care placement in a given year?
+
+- Have state-licensed or privately-licensed foster homes been more prevalent on the east side of the state (e.g., Spokane County) or the west side (e.g., Pierce County)?
+
+#### See also
+
+- [Siblings Placed Together (By Number of Siblings)](https://portal.cssat.org/visualizations/siblings-number), fors how likely children are to be placed with their siblings, depending on the size of the sibling group.
+
+- [Children in Out-of-Home Care (Counts)](https://portal.cssat.org/visualizations/ooh-counts), for the number of children in care on the first day of each year.
+
+

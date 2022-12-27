@@ -1,0 +1,964 @@
+{
+  "multichart": {
+    "_comment1": "This filter MUST be first and must use this name",
+    "_comment2": "The values are computed by the client.",
+    "display": {
+      "legend": "Graph Display",
+      "column": "displayFields",
+      "type": "filter",
+      "selected": "Overview",
+      "help": {
+        "default": "This filter allows you to select the count or rate of opened and closed investigations/assessments by quarter or year (cohort data).",
+        "sp_ooh_wb_familysettings": "The graph format provides a line graph of the percentage of children in one of three family settings—a state foster home, a private foster home, or with relatives/kin—on the first day of the year (point-in-time data). The ‘overview’ displays the percentage of children in all family settings, as well as those in a ‘non-family setting (e.g., group home).",
+        "sp_ooh_wb_siblings_by_year": "With filter you can examine whether all, some,or none of the siblings in family are placed together in out-of-home care. The‘overview’ selection compares the three choices.",
+        "sp_mp_rate_referral_ts": "The graph display allows you to see the graph as a trend line (default), in an overview mode (a trend line with the scatterplot), or as a scatterplot.  A scatterplot shows the relationship between the two sets of data (on the x and y axis). The scatterplot is used to calculate the trend line.",
+        "sp_mp_rate_referrals_order_ts": "The graph display allows you to see the graph as a trend line (default), in an overview mode (a trend line with the scatterplot), or as a scatterplot.  A scatterplot shows the relationship between the two sets of data (on the x and y axis). The scatterplot is used to calculate the trend line.",
+        "sp_mp_rate_referral_scrn_in_ts": "The graph display allows you to see the graph as a trend line (default), in an overview mode (a trend line with the scatterplot), or as a scatterplot.  A scatterplot shows the relationship between the two sets of data (on the x and y axis). The scatterplot is used to calculate the trend line.",
+        "sp_mp_rate_referrals_scrn_in_order_ts": "The graph display allows you to see the graph as a trend line (default), in an overview mode (a trend line with the scatterplot), or as a scatterplot.  A scatterplot shows the relationship between the two sets of data (on the x and y axis). The scatterplot is used to calculate the trend line.",
+        "sp_mp_rate_placement_ts": "The graph display allows you to see the graph as a trend line (default), in an overview mode (a trend line with the scatterplot), or as a scatterplot.  A scatterplot shows the   relationship between the two sets of data (on the x and y axis). The scatterplot is used to calculate the trend line.",
+        "sp_mp_rate_placement_order_ts": "The graph display allows you to see the graph as a trend line (default), in an overview mode (a trend line with the scatterplot), or as a scatterplot.  A scatterplot shows the   relationship between the two sets of data (on the x and y axis). The scatterplot is used to calculate the trend line."
+      }
+    }
+  },
+  "age_exit_safety": {
+    "table": "ref_lookup_age_cdc_census_mix",
+    "display": {
+      "legend": "Age at Exit",
+      "column": "demographicFields",
+      "type": "param",
+      "help": "This filter references the child’s age when they exited out-of-home care."
+    }
+  },
+  "ageEntry": {
+    "table": "ref_lookup_age_cdc_census_mix",
+    "display": {
+      "legend": "Age at Entry",
+      "column": "demographicFields",
+      "type": "param",
+      "help": "This filter references the child’s age when they entered out-of-home care."
+    }
+  },
+  "pitAge": {
+    "table": "ref_lookup_age_cdc_census_mix",
+    "display": {
+      "legend": "Age of Child",
+      "column": "demographicFields",
+      "type": "param",
+      "help": "Age references the child’s age on the first day of the year(s)."
+    }
+  },
+  "ageCensus": {
+    "table": "ref_lookup_age_census",
+    "valueColumn": 3,
+    "display": {
+      "legend": "Age at Removal",
+      "column": "demographicFields",
+      "type": "param",
+      "help": "Age references the child’s age at the time s/he was removed from their home and placed into out-of-home care (e.g., kinship care, foster care). The age categories are based on U.S. Census classifications, allowing age to be calculated per 1,000 children in individual counties."
+    }
+  },
+  "pitAgeCensus": {
+    "table": "ref_lookup_age_census",
+    "valueColumn": 3,
+    "display": {
+      "legend": "Age of Children",
+      "column": "demographicFields",
+      "type": "param",
+      "help": "The age filter references a child’s age on a given date (i.e., the first day of the selected year(s) or quarter(s)). The age categories are based on U.S. Census classifications, allowing age to be calculated per 1,000 children in individual counties. "
+    }
+  },
+  "ageExits": {
+    "table": "ref_lookup_age_census",
+	"valueColumn": 3,
+    "display": {
+      "legend": "Age at Exit",
+      "column": "demographicFields",
+      "type": "param",
+      "help": "The age categories for children who exit out-of-home care includes youth through the 18th year in order to account for all emancipations, which can continue through the 18th year. (Other age categories in the Data Portal go through age 17.)"
+    }
+  },
+  "discharge_type_safety": {
+    "values": {
+      "1": "Reunification",
+      "3": "Adoption",
+      "4": "Guardianship"
+    },
+    "display": {
+      "legend": "Re-Entry by Exit Type",
+      "column": "displayFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": false,
+      "selected": [
+        1,
+        3,
+        4
+      ],
+      "alias": "cd_discharge_type",
+      "visible": true,
+      "help": "You can select re-entry into out-of-home care from <A href='http://partnersforourchildren.org/resources/glossary/f#193' target=_blank>reunification</A>, adoption, or <A href='http://partnersforourchildren.org/resources/glossary/g#206' target=_blank>guardianship</A>. The default includes all three outcomes."
+    }
+  },
+    "ageSib": {
+    "table": "ref_lookup_sib_age_grp",
+    "removeKeys": [
+      4
+    ],
+    "display": {
+      "legend": "Age of Children in Household",
+      "column": "demographicFields",
+      "type": "param",
+      "help": {
+        "default": "This filter references the ages of the children in the household at the time the reportwas investigated/assessed. The age categories follow U.S. Census classifications, allowing the rate of cases per 1,000 households to be calculated.",
+        "sp_ihs_trends_rates": "This filter references the ages of the children in the household at the time placement prevention services were being received. The age categories follow U.S. Census classifications, allowing the rate of cases per 1,000 households to be calculated."
+      }
+    }
+  },
+  "discharge_type_outcomes": {
+    "table": "ref_lookup_type_of_exit",
+    "display": {
+      "legend": "Outcome",
+      "column": "displayFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": true,
+      "selected": [
+        1,
+        3,
+        4
+      ],
+      "alias": "cd_discharge_type",
+      "visible": true,
+      "resultUnavailable": "disable",
+      "help": "You can select one of three permanency outcomes (<A href='http://partnersforourchildren.org/resources/glossary/f#193' target=_blank>reunification</A>, <A href='http://partnersforourchildren.org/resources/glossary/g#206' target=_blank>guardianship</A>, or adoption), as well as <A href='http://partnersforourchildren.org/resources/glossary/e#184' target=_blank>emancipation</A>, other exit (e.g., transfer to another authority), or still in out-of-home care. The default outcome/exit type includes reunification, adoption, and guardianship."
+    }
+  },
+  "discharge_type_exits": {
+    "table": "ref_lookup_cd_discharge_type_exits",
+    "display": {
+      "legend": "Permanency Type",
+      "column": "displayFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": true,
+      "selected": 0,
+      "alias": "cd_discharge_type",
+      "visible": false,
+      "resultUnavailable": "disable",
+      "help": "You can select exit from out-of-home care to <A href='http://partnersforourchildren.org/resources/glossary/f#193' target=_blank>reunification</A>, adoption, <A href='http://partnersforourchildren.org/resources/glossary/g#206' target=_blank>guardianship</A>, <A href='http://partnersforourchildren.org/resources/glossary/e#184' target=_blank>emancipation</A> or other (e.g., transfer to another Washington State authority)."
+    }
+  },
+  "bin_sibling_group_size": {
+    "values": {
+      "0": "All",
+      "1": "2 Siblings",
+      "2": "3 Siblings",
+      "3": "4 Siblings",
+      "4": "More than 4 Siblings"
+    },
+    "display": {
+      "legend": "Sibling Group Size",
+      "column": "demographicFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": false,
+      "selected": 0,
+      "visible": false,
+      "help": "This filter returns data on the number of siblings in a family in order to assess the configuration of siblings who are placed together."
+    }
+  },
+  "sib_plc_measure": {
+    "values": {
+      "1": "All Together",
+      "2": "Some Together",
+      "3": "None Together"
+    },
+    "display": {
+      "legend": "Sibling Grouping",
+      "column": "displayFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": false,
+      "selected": 1,
+      "alias": "measure_nbr",
+      "visible": false,
+      "help": "This filter returns data on the groupings (i.e., all, some, or none) of siblings placed in out-of-home care."
+    }
+  },
+  "kincare": {
+    "values": {
+      "0": "All Out-of-Home Care",
+      "1": "Relative/Kinship Care"
+    },
+    "display": {
+      "legend": "Placement Type",
+      "column": "advancedFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": true,
+      "selected": 0,
+      "visible": false,
+      "help": "You can filter for relative/kinship placements only or for all types of placement (foster care, kinship care, group home, etc.)."
+    }
+  },
+  "ethnicityCensus": {
+    "table": "ref_lookup_ethnicity_census",
+    "addKeyValues": {
+      "-1": "-"
+    },
+    "removeKeys": [
+      7
+    ],
+    "display": {
+      "legend": "Race/Ethnicity",
+      "column": "demographicFields",
+      "type": "param",
+      "zeroLast": false,
+      "sort": "raceEthnicityCompare",
+      "selected": 0,
+      "help": "Race and ethnicity categories are based on U.S. Census classifications. There are seven races and four ethnicities to choose from. Because the Census provides data on the races and ethnicities within geographic divisions, we are able to calculate the rate of cases (per 1,000) by race or ethnicity for the state or county. Note that each head of household (for the Investigations &amp; Assessment) or child (for the Out-of-Home Care measures) has a race AND an ethnicity."
+    }
+  },
+  "gender": {
+    "table": "ref_lookup_gender",
+    "valueColumn": 2,
+    "removeKeys": [
+      3
+    ],
+    "display": {
+      "legend": "Gender",
+      "column": "demographicFields",
+      "type": "param"
+    }
+  },
+  "initSetng": {
+    "table": "ref_lookup_placement",
+    "display": {
+      "legend": "Initial Placement Setting",
+      "column": "advancedFields",
+      "type": "param",
+      "visible": false,
+      "help": {
+        "default": "This filter provides counts and rates of children in their first placement setting on the first day of a given year or quarter (point-in-time data). For example, if you select ‘foster care’ and January 1, 2005, the data returned will include the first placement that falls within the episode that includes January 1, 2005. See <A href='http://partnersforourchildren.org/resources/glossary/p#220' target=_blank>placement settings</A> in the Glossary for more information.",
+        "sp_ooh_flow_entries_rates": "This filter provides counts and rates of cohorts or groups of children who entered (or exited) out-of-home care in a selected quarter or year by their first placement setting. For example, if you select ‘foster care’ and  the cohort year 2010, the data returned will include the 2010 number or rate of entries (or the number of exits) for all the children in out-of-home care who were initially placed in foster care. See <A href='http://partnersforourchildren.org/resources/glossary/p#220' target=_blank>placement settings</A> in the Glossary for more information.",
+        "sp_ooh_flow_exits": "This filter provides counts and rates of cohorts or groups of children who entered (or exited) out-of-home care in a selected quarter or year by their first placement setting. For example, if you select ‘foster care’ and  the cohort year 2010, the data returned will include the 2010 number or rate of entries (or the number of exits) for all the children in out-of-home care who were initially placed in foster care. See <A href='http://partnersforourchildren.org/resources/glossary/p#220' target=_blank>placement settings</A> in the Glossary for more information.",
+        "sp_ooh_flow_entries_counts": "This filter provides counts and rates of cohorts or groups of children who entered (or exited) out-of-home care in a selected quarter or year by their first placement setting. For example, if you select ‘foster care’ and  the cohort year 2010, the data returned will include the 2010 number or rate of entries (or the number of exits) for all the children in out-of-home care who were initially placed in foster care. See <A href='http://partnersforourchildren.org/resources/glossary/p#220' target=_blank>placement settings</A> in the Glossary for more information.",
+        "sp_ooh_reentry": "This filter provides counts of cohorts or groups of children who re-entered out-of-home care in a selected quarter or year by initial placement type. For example, if you select ‘foster care’ and 2010 as the exit (from out-of-home care) cohort year, the data returned will include the percent of re-entries for all the children in out-of-home care in 2010 whose first placement setting was foster care. See <A href='http://partnersforourchildren.org/resources/glossary/p#220' target=_blank>placement settings</A> in the Glossary for more information.",
+        "sp_ooh_outcomes": "This filter provides counts of cohorts or groups of children who exited out-of-home care in a selected quarter or year by initial placement type. For example, if you select ‘foster care’ and 2010 as the entry (into out-of-home care) cohort year, the data returned will include the percent of the selected outcome(s) for all the children in out-of-home care in 2010 whose first placement setting was foster care. See <A href='http://partnersforourchildren.org/resources/glossary/p#220' target=_blank>placement settings</A> in the Glossary for more information."
+      }
+    }
+  },
+  "longSetng": {
+    "table": "ref_lookup_placement",
+    "display": {
+      "legend": "Longest Placement Setting",
+      "column": "advancedFields",
+      "type": "param",
+      "visible": false,
+      "help": {
+        "default": "This filter provides counts and rates of children in their longest placement setting on the first day of a given year or quarter (point-in-time data). For example, if you select ’foster care’ and  January 1, 2005, the data returned will include the longest placement that falls within the episode that includes January 1, 2005. See <A href='http://partnersforourchildren.org/resources/glossary/p#220' target=_blank>placement settings</A> in the Glossary for more information.",
+        "sp_ooh_flow_entries_rates": "This filter provides counts and rates of cohorts or groups of children who entered (or exited) out-of-home care in a selected quarter or year by their longest placement setting. For example, if you select ‘foster care’ and  the cohort year 2010, the data returned will include the 2010 number or rate of entries (or the number of exits) for all the children in out-of-home care who were initially placed in foster care. See <A href='http://partnersforourchildren.org/resources/glossary/p#220' target=_blank>placement settings</A> in the Glossary for more information.",
+        "sp_ooh_flow_exits": "This filter provides counts and rates of cohorts or groups of children who entered (or exited) out-of-home care in a selected quarter or year by their longest placement setting. For example, if you select ‘foster care’ and  the cohort year 2010, the data returned will include the 2010 number or rate of entries (or the number of exits) for all the children in out-of-home care who were initially placed in foster care. See <A href='http://partnersforourchildren.org/resources/glossary/p#220' target=_blank>placement settings</A> in the Glossary for more information.",
+        "sp_ooh_flow_entries_counts": "This filter provides counts and rates of cohorts or groups of children who entered (or exited) out-of-home care in a selected quarter or year by their longest placement setting. For example, if you select ‘foster care’ and  the cohort year 2010, the data returned will include the 2010 number or rate of entries (or the number of exits) for all the children in out-of-home care who were initially placed in foster care. See <A href='http://partnersforourchildren.org/resources/glossary/p#220' target=_blank>placement settings</A> in the Glossary for more information.",
+        "sp_ooh_reentry": "This filter provides counts of cohorts or groups of children who re-entered out-of-home care in a selected quarter or year by longest placement type. For example, if you select ‘foster care’ and 2010 as the exit (from out-of-home care) cohort year, the data returned will include the percent of re-entries for all the children in out-of-home care in 2010 whose longest placement setting was foster care. See <A href='http://partnersforourchildren.org/resources/glossary/p#220' target=_blank>placement settings</A> in the Glossary for more information.",
+        "sp_ooh_outcomes": "This filter provides counts of cohorts or groups of children who exited out-of-home care in a selected quarter or year by longest placement type. For example, if you select ‘foster care’ and 2010 as the entry (into out-of-home care) cohort year, the data returned will include the percent of the selected outcome(s) for all the children in out-of-home care in 2010 whose longest placement setting was foster care. See <A href='http://partnersforourchildren.org/resources/glossary/p#220' target=_blank>placement settings</A> in the Glossary for more information."
+      }
+    }
+  },
+  "qry_type_entries": {
+    "values": {
+      "0": "Unique Entries into Out-of-Home Care",
+      "1": "First Entries into Out-of-Home Care",
+      "2": "All Entries into Out-of-Home Care"
+    },
+    "display": {
+      "legend": "Count Type",
+      "column": "displayFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": false,
+      "sort": "qryTypeCompare",
+      "selected": 2,
+      "visible": true,
+      "help": "Cohort data for counts and rates of children in out-of-home care are aggregated into ‘first’, ‘unique’, and ‘all’ children entering out-of-home care. See <A href='http://partnersforourchildren.org/resources/reports/interpreting-type-count-filter' target=_blank>Interpreting Type of Count</A>."
+    }
+  },
+  "qry_type_exits": {
+    "values": {
+      "0": "Unique Exits from Out-of-Home Care",
+      "1": "First Exits from Out-of-Home Care",
+      "2": "All Exits from Out-of-Home Care"
+    },
+    "display": {
+      "legend": "Count Type",
+      "column": "displayFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": false,
+      "sort": "qryTypeCompare",
+      "selected": 2,
+      "visible": true,
+      "help": "Cohort data for counts of children in out-of-home care are aggregated into ‘first’, ‘unique’, and ‘all’ children exiting out-of-home care. See <A href='http://partnersforourchildren.org/resources/reports/interpreting-type-count-filter' target=_blank>Interpreting Type of Count</A>."
+    }
+  },
+  "qry_type_first_all": {
+    "table": "vw_qry_type_poc1ab_first_all",
+    "display": {
+      "legend": "Count Type",
+      "column": "displayFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": false,
+      "selected": 2,
+      "visible": true,
+      "help": "Data for counts/rates of children in out-of-home care are aggregated into ‘first’ and ‘all’ stays in out-of-home care.‘First Stays in Out-of-Home Care’ refers to the first ever stay/episode in out-of-home care; ‘All Stays in Out-of-Home’ includes all stays/episodes during the selected quarter or year. See <A href='http://partnersforourchildren.org/resources/reports/interpreting-type-count-filter' target=_blank>Interpreting Type of Count</A>."
+    }
+  },
+  "qry_type_first_unique_ooh_reentry": {
+    "values": {
+      "0": "Unique Exits from Out-of-Home Care",
+      "1": "First Exits from Out-of-Home Care"
+    },
+    "display": {
+      "legend": "Count Type",
+      "column": "displayFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": false,
+      "selected": 0,
+      "visible": true,
+      "help": "Cohort data for children who re-enter out-of-home care are aggregated into ‘first’ and ‘unique’ exits from out-of-home care. See <A href='http://partnersforourchildren.org/resources/reports/interpreting-type-count-filter' target=_blank>Interpreting Type of Count</A>."
+    }
+  },
+  "qry_type_first_unique_ooh_outcomes": {
+    "values": {
+      "0": "Unique Entries into Out-of-Home Care",
+      "1": "First Entries into Out-of-Home Care"
+    },
+    "display": {
+      "legend": "Count Type",
+      "column": "displayFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": false,
+      "selected": 0,
+      "visible": true,
+      "help": "Cohort data for children who enter out-of-home care are aggregated into ‘first’ and ‘unique’ entries into out-of-home care. See <A href='http://partnersforourchildren.org/resources/reports/interpreting-type-count-filter' target=_blank>Interpreting Type of Count</A>."
+    }
+  },
+    "qry_type": {
+    "table": "ref_lookup_qry_type",
+    "display": {
+      "legend": "Count Type",
+      "column": "displayFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": false,
+      "sort": "qryTypeCompare",
+      "selected": 0,
+      "visible": true,
+      "help": "Cohort data for household with children who are placed in out-of-home care after receiving placement prevention services are aggregated into ‘first’ and ‘all’ placement prevention cases. See <A href='http://partnersforourchildren.org/resources/reports/interpreting-type-count-filter' target=_blank>Interpreting Type of Count</A>."
+    }
+  },  
+  "qry_type_first_unique_ia_safety": {
+    "values": {
+      "0": "All Investigations/Assessments",
+      "1": "First Investigations/Assessments"
+    },
+    "display": {
+      "legend": "Count Type",
+      "column": "displayFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": false,
+      "selected": 0,
+      "visible": true,
+      "help": "Cohort data for households with children who are re-referred following a prior reportthat was screened-in for investigation/assessment are aggregated into counts of ‘first’ and ‘all’ investigations/assessments. See <A href='http://partnersforourchildren.org/resources/reports/interpreting-type-count-filter' target=_blank>Interpreting Type of Count</A>."
+    }
+  },
+  "qry_type_poc2": {
+    "table": "ref_lookup_qry_type_poc2",
+    "display": {
+      "legend": "Count Type",
+      "column": "displayFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": false,
+      "sort": "qryTypeCompare",
+      "selected": 2,
+      "visible": true,
+      "help": "Trend for investigations/assessments are aggregated into ‘first,’ ‘unique,’ and ‘all’ investigations/assessments per household. ‘First Investigation/Assessment’ is the first ever report that was screened-in. ‘Unique Investigations/Assessments’ references the first investigation/assessment within a given time period. ‘All Investigations/Assessments’ includes all reports that were screened-in for investigation/assessment during the selected quarter or year. See <A href='http://partnersforourchildren.org/resources/reports/interpreting-type-count-filter' target=_blank>Interpreting Type of Count</A>."
+    }
+  },
+  "service_type": {
+    "table": "ref_lookup_service_type",
+    "display": {
+      "legend": "Service",
+      "column": "advancedFields",
+      "type": "filter",
+      "selected": 0,
+      "visible": false
+    }
+  },
+  "date_type": {
+    "table": "ref_lookup_date_type",
+    "display": {
+      "legend": "Date(s)",
+      "column": "dateFields",
+      "type": "dateType",
+      "selected": 2,
+      "format": {
+        "0": "'MMM yyyy",
+        "1": "yyyyQQ",
+        "2": "yyyy"
+      }
+    }
+  },
+  "date_type_cohort": {
+    "table": "ref_lookup_date_type",
+    "display": {
+      "legend": "Cohort Duration",
+      "column": "dateFields",
+      "type": "dateType",
+      "selected": 2,
+      "alias": "date_type",
+      "help": "This references the length of time of the selected cohort (group) by quarter(s) or year(s).",
+      "format": {
+        "0": "'MMM yyyy",
+        "1": "yyyyQQ",
+        "2": "yyyy"
+      }
+    }
+  },
+  "date_type_pit": {
+    "table": "ref_lookup_date_type",
+    "display": {
+      "legend": "Point-in-Time",
+      "column": "dateFields",
+      "type": "dateType",
+      "selected": 2,
+      "alias": "date_type",
+      "help": "This references the count or rate on the first day of the quarter(s) or year(s) selected."
+    }
+  },
+  "reporter_type": {
+    "table": "ref_filter_reporter_type",
+    "removeKeys": [
+      -99
+    ],
+    "orderBy": "ordering",
+    "display": {
+      "legend": "Reporter",
+      "column": "advancedFields",
+      "type": "param",
+      "multi": true,
+      "visible": false,
+      "help": "In Washington State, anyone who has reasonable cause to believe that a child has suffered abuse or neglect can, in good faith, make a report (usually called a referral). <A href='https://www.dcyf.wa.gov/safety/mandated-reporter'target_blank>Mandated reporters</A> are required by law to report concerns to the local Department of Children, Youth, and Families office or to law enforcement.<BR /><BR /> 'Other' reporters include the subject or the victim. 'All' includes all reports, mandated or not."
+    }
+  },
+  "access_type": {
+    "table": "ref_filter_access_type",
+    "removeKeys": [
+      7
+    ],
+    "display": {
+      "legend": "Entry Point",
+      "column": "advancedFields",
+      "type": "param",
+      "multi": true,
+      "zeroLast": true,
+      "disabled": [
+        7
+      ],
+      "resultUnavailable": "disable",
+      "help": "You can filter for five primary entry points in the child welfare system, i.e., first point of contact with the Department of Children, Youth, and Families. Currently, the Data Portal returns data for:<BR /><BR />1) <A href='https://www.dcyf.wa.gov/services/child-welfare-system/cps' target=_blank>Child Protective Services</A> (CPS), which provides 24 hour, seven days a week intake, screening, and investigative services for reports of alleged child abuse and neglect; <BR /><BR />2) Alternative Response System (ARS), a voluntary program for low-to-moderate risk families who were referred to CPS; <BR /><BR />3) <A href='https://www.dcyf.wa.gov/services/at-risk-youth/frs' target=_blank>Family Reconciliation Services</A> (FRS), a voluntary program serving runaway adolescents and youth in conflict with their families;<BR /><BR />4) Risk Only, a referral made when information collected gives reasonable cause to believe that risk or safety factors exist that place the child at imminent risk of serious harm; and <BR /><BR />5) <A href='http://partnersforourchildren.org/resources/glossary/c#155' target=_blank>Child and Family Welfare Services</A> (CFWS), which provides both permanency planning and court-ordered services to children and families to mitigate the risk of abuse or neglect so that children are able to safely return to their home of origin. <BR /><BR /> <A href='https://www.dcyf.wa.gov/sites/default/files/pubs/22-1534.pdf' target=_blank>Family Assessment Response</A> (FAR), a new alternative pathway for accepted reports of low-to-moderate risk of child maltreatment, is grayed out because the number of cases that enter through this programs is still small."
+    }
+  },
+  "allegation": {
+    "table": "ref_filter_allegation",
+    "display": {
+      "legend": "Allegations",
+      "column": "advancedFields",
+      "type": "param",
+      "multi": true,
+      "visible": false,
+      "help": "During an investigation or assessment, social workers can record one (or more) allegation per case. The measures for Investigations & Assessments and Placement Prevention Services count allegations per household. Out-of-Home Care measures count allegations per child. <BR /><BR /> Sexual abuse includes sexual exploration and neglect includes abandonment, negligent treatment, and medical neglect. With the default COUNT TYPE set to ‘all,’ a single household can be associated with more than one allegation.<BR /><BR /> The filter choice ‘Any of the Above,’ returns a count of one allegation for each household/child. The filter choice ‘All (With or Without Allegation)’ means that cases with no allegations are also counted (as well as cases with multiple allegations per case)."
+    }
+  },
+  "finding": {
+    "table": "ref_filter_finding",
+    "display": {
+      "legend": "Allegation Finding",
+      "column": "advancedFields",
+      "type": "param",
+      "multi": true,
+      "visible": false,
+      "help": "An allegation finding means that, more likely than not, the Department of Children, Youth, and Families Child Protection Services (CPS) investigator determined that child abuse or neglect did occur. Investigations & Assessments and Placement Prevention Services are counted per household. Out-of-Home Care measures are counted per child.<BR /><BR /> Sexual abuse includes sexual exploration and neglect includes abandonment, negligent treatment, and medical neglect. With the default COUNT TYPE set to ‘all,’ a single household can be associated with more than one allegation.<BR /><BR /> With the default COUNT TYPE set to ‘all,’ a single household/child can be associated with more than one finding. The filter choice ‘Any of the Above,’ returns a count of one finding for each household/child. The filter choice ‘All (With or Without Allegation Finding)’ means that cases with no finding are also counted (as well as cases with multiple findings per case)."
+    }
+  },
+  "nbr_placement": {
+    "table": "ref_filter_nbr_placement",
+    "display": {
+      "legend": "Number of Placements Settings",
+      "column": "advancedFields",
+      "type": "param",
+      "multi": true,
+      "visible": false,
+      "help": {
+        "default": "The ‘number of placement settings’ filter for the Entry & Exit Trend measures provides the option to examine the count and rate of entries, and the count of exits, for children who have had one to five placements during the <EM>cohort</EM> year(s) chosen.<BR /><BR /> For example, if you select the measure ‘Count of Out-of-Home Care Entries,’ and filter for the year 2004 and ‘2 placements,’ the data returned will indicate the number of children who entered care in 2004 and who had two placements within any episode that began in 2004. If there were more than one episode in 2004, the number of placement settings in each episode will be counted.<BR /><BR /> Note that placement settings do not include temporary settings, as defined by <A href='http://partnersforourchildren.org/resources/glossary/a#136' target=_blank>AFCARS</A> in the <A href='https://www.acf.hhs.gov/cwpm/public_html/programs/cb/laws_policies/laws/cwpm/index.jsp?idFlag=0'target=_blank>Administration for Children &amp; Families, Child Welfare Policy manual (1.2B.7 #21)</A>. Also, the count/rate of placement settings is not the same as the count/rate of moves; placement moves involve a <EM>transition</EM> from one setting/location to another.",
+        "sp_ooh_pit_counts": "The ‘number of placement settings’ filter for the Trends measure provides the option to examine the count and rate of children in out-of-home care who have had one to five placements during the episode that includes the <EM>point-in-time</EM> date selected (i.e., the first day of the year(s) chosen). <BR /><BR /> For example, if you select the measure 'Count of Children in Out-of-Home Care...,' and filter for January 1, 2004 and ‘3 placements,' the data returned will indicate the number of children in out-of-home care who had three placements within the out-of-home care episode that included January 1, 2004. <BR /><BR /> Note that placement settings do not include temporary settings, as defined by <A href='http://partnersforourchildren.org/resources/glossary/a#136' target=_blank>AFCARS</A> in the <A href='https://www.acf.hhs.gov/cwpm/public_html/programs/cb/laws_policies/laws/cwpm/index.jsp?idFlag=0'target=_blank>Administration for Children &amp; Families, Child Welfare Policy manual (1.2B.7 #21)</A>. Also, the count/rate of placement settings is not the same as the count/rate of placement moves; placement moves involve a <EM>transition</EM> from one setting/location to another and are not tied to a point-in-time.",
+        "sp_ooh_pit_rates": "The ‘number of placement settings’ filter for the Trends measure provides the option to examine the count and rate of children in out-of-home care who have had one to five placements during the episode that includes the <EM>point-in-time</EM> date selected (i.e., the first day of the year(s) chosen). <BR /><BR /> For example, if you select the measure 'Rate of Out-of-Home Care per 1,000 Children...,' and filter for January 1, 2004 and ‘3 placements,' the data returned will indicate the number of children in out-of-home care who had three placements within the out-of-home care episode that included January 1, 2004. <BR /><BR /> Note that placement settings do not include temporary settings, as defined by <A href='http://partnersforourchildren.org/resources/glossary/a#136' target=_blank>AFCARS</A> in the <A href='https://www.acf.hhs.gov/cwpm/public_html/programs/cb/laws_policies/laws/cwpm/index.jsp?idFlag=0'target=_blank>Administration for Children &amp; Families, Child Welfare Policy manual (1.2B.7 #21)</A>. Also, the count/rate of placement settings is not the same as the count/rate of placement moves; placement moves involve a <EM>transition</EM> from one setting/location to another and are not tied to a point-in-time.",
+        "sp_ooh_reentry": "The ‘number of placement settings’ filter for the Safety measure provides the option to examine the percentage of re-entries into care for children who have had one to five placements during the exit cohort year(s) chosen.<BR /><BR /> For example, if you select ‘Re-Entry into Out-of-Home Care,’ and filter for the year 2004 and ‘2 placements,’ the data returned will indicate the percentage of children who re-entered care with two placements within an episode that started any time in 2004. If there were more than one episode in 2004, the number of placement settings in each episode will be counted.<BR /><BR /> Note that placement settings do not include temporary settings, as defined by <A href='http://partnersforourchildren.org/resources/glossary/a#136' target=_blank>AFCARS</A> in the <A href='https://www.acf.hhs.gov/cwpm/public_html/programs/cb/laws_policies/laws/cwpm/index.jsp?idFlag=0'target=_blank>Administration for Children &amp; Families, Child Welfare Policy manual (1.2B.7 #21)</A>. Also, placement settings are not the same as placement moves; placement moves involve a <EM>transition</EM> from one setting/location to another.",
+        "sp_ooh_outcomes": "The ‘number of placement settings’ filter for the Outcomes measure provides the option to examine the percentage of children exiting to reunification, adoption, or guardianship who have had one to five placements during the entry cohort year(s) selected. <BR /><BR /> For example, if you filter for the entry year 2004 and ‘2 placements,’ the data returned will indicate the percentage of children by outcome (and by the number of months since entering care in 2004) who had two placements within an episode that started any time in 2004. If there were more than one episode in 2004, the number of placement settings in each episode will be counted. <BR /><BR /> Note that placement settings do not include temporary settings, as defined by <A href='http://partnersforourchildren.org/resources/glossary/a#136' target=_blank>AFCARS</A> in the <A href='https://www.acf.hhs.gov/cwpm/public_html/programs/cb/laws_policies/laws/cwpm/index.jsp?idFlag=0'target=_blank>Administration for Children &amp; Families, Child Welfare Policy manual (1.2B.7 #21)</A>. Also, placement settings are not the same as placement moves; placement moves involve a <EM>transition</EM> from one setting/location to another.",
+        "sp_ooh_wb_familysettings": "The ‘number of placement settings’ filter for the Well-Being measures provides the option to examine the percentage of children in family settings and with siblings who have had one to five placement settings during the episode with the <EM>point-in-time</EM> date selected (i.e., the first day of the year(s) chosen). <BR /><BR /> For example, if you select the measure ‘Placement in Family Settings on the 1st Day of the Year’ and filter for January 1, 2004 and ‘3 placements,’ the data returned will indicate the number of children placed in various settings, including a family setting, who had three placements within the out-of-home care episode that included January 1, 2004. <BR /><BR /> Note that placement settings do not include temporary settings, as defined by <A href='http://partnersforourchildren.org/resources/glossary/a#136' target=_blank>AFCARS</A> in the <A href='https://www.acf.hhs.gov/cwpm/public_html/programs/cb/laws_policies/laws/cwpm/index.jsp?idFlag=0'target=_blank>Administration for Children &amp; Families, Child Welfare Policy manual (1.2B.7 #21)</A>. Also, placement settings are not the same as placement moves; placement moves involve a <EM>transition</EM> from one setting/location to another and are not tied to a point-in-time.",
+        "sp_ooh_wb_siblings_by_year": "The ‘number of placement settings’ filter for the Well-Being measures provides the option to examine the percentage of children in family settings and with siblings who have had one to five placement settings during the episode with the <EM>point-in-time</EM> date selected (i.e., the first day of the year(s) or quarter(s) chosen). <BR /><BR /> For example, if you select the measure ‘Placement in Family Settings on the 1st Day of the Year’ and filter for January 1, 2004 and ‘3 placements,’ the data returned will indicate the number of children placed in various settings, including a family setting, who had three placements within the out-of-home care episode that included January 1, 2004. <BR /><BR />Note that placement settings do not include temporary settings, as defined by <A href='http://partnersforourchildren.org/resources/glossary/a#136' target=_blank>AFCARS</A> in the <A href='https://www.acf.hhs.gov/cwpm/public_html/programs/cb/laws_policies/laws/cwpm/index.jsp?idFlag=0'target=_blank>Administration for Children &amp; Families, Child Welfare Policy manual (1.2B.7 #21)</A>. Also, placement settings are not the same as placement moves; placement moves involve a <EM>transition</EM> from one setting/location to another and are not tied to a point-in-time.",
+        "sp_ooh_wb_siblings_by_sibgroup": "The ‘number of placement settings’ filter for the Well-Being measures provides the option to examine the percentage of children in family settings and with siblings who have had one to five placement settings during the episode with the <EM>point-in-time</EM> date selected (i.e., the first day of the year(s) or chosen). <BR /><BR /> For example, if you select the measure ‘Placement in Family Settings on the 1st Day of the Year’ and filter for January 1, 2004 and ‘3 placements,’ the data returned will indicate the number of children placed in various settings, including a family setting, who had three placements within the out-of-home care episode that included January 1, 2004. <BR /><BR /> Note that placement settings do not include temporary settings, as defined by <A href='http://partnersforourchildren.org/resources/glossary/a#136' target=_blank>AFCARS</A> in the <A href='https://www.acf.hhs.gov/cwpm/public_html/programs/cb/laws_policies/laws/cwpm/index.jsp?idFlag=0'target=_blank>Administration for Children &amp; Families, Child Welfare Policy manual (1.2B.7 #21)</A>. Also, placement settings are not the same as placement moves; placement moves involve a <EM>transition</EM> from one setting/location to another and are not tied to a point-in-time."
+      }
+    }
+  },
+  "ooh_los": {
+    "table": "ref_filter_los",
+    "display": {
+      "legend": "Duration of Out-of-Home Stay",
+      "column": "advancedFields",
+      "type": "param",
+      "multi": true,
+      "visible": false,
+      "help": {
+        "default": "<EM>Episodes</EM> or <EM>stays</EM> in out-of-home care start with a child’s removal from home and end with their return home (or to another permanent outcome).  A child can be placed more than once within an episode, e.g., a child may first be placed in a foster home, and then in the care of a relative before reunification with a parent, which ends the episode. <BR /><BR />The Entry & Exit Trends measures provide <EM>cohort </EM> counts and rates of out-of-home care entries, as well as cohort counts of exits. The ‘duration of out-of-home stay’ filter provides the option to examine the entries and exits into out-of-home care for children who had an episode that lasted:  greater than seven days; greater than 60 days; greater than one year; or greater than two years. <BR /><BR />If, for example, you select the measure ‘Count of Out-of-Home Entries,’ and filter for the year 2004 and ‘episode duration greater than 60 days,’ the data returned will indicate the number of children in out-of-home care who had an episode that started any time in 2004 that lasted longer than 60 days. If there were more than one episode in 2004 that lasted longer than 60 days, both episodes will be counted. ",
+        "sp_ooh_pit_counts": "<EM>Episodes</EM> or <EM>stays</EM> in out-of-home care start with a child’s removal from home and end with their return home (or to another permanent outcome). A child can be placed more than once within an episode, e.g., a child may first be placed in a foster home,and then in the care of a relative before reunification with a parent, which ends the episode. <BR /><BR />The Trends measures provide <EM>point-in-time</EM> counts and rates of out-of-home care placements for the first day of the selected quarter(s) or year(s). The ‘duration of out-of-home stay’ filter provides the option to examine out-of-home care episodes for children who had an episode that was:  greater than seven days; greater than 60 days; greater than one year; or greater than two years. <BR /><BR />If, for example, you select the measure 'Count of Children in Out-of-Home Care,' and filter for January 1, 2004 and ‘episode duration greater than one year,’ the data returned will indicate the number of children in out-of-home care who were in care longer than one year within the out-of-home care episode that included January 1, 2004. ",
+        "sp_ooh_pit_rate": "<EM>Episodes</EM> or <EM>stays</EM> in out-of-home care start with a child’s removal from home and end with their return home (or to another permanent outcome). A child can be placed more than once within an episode, e.g., a child may first be placed in a foster home,and then in the care of a relative before reunification with a parent, which ends the episode. <BR /><BR />The Trends measures provide <EM>point-in-time</EM> counts and rates of out-of-home care placements for the first day of the selected quarter(s) or year(s). The ‘duration of out-of-home stay’ filter provides the option to examine out-of-home care episodes for children who had an episode that was:  greater than seven days; greater than 60 days; greater than one year; or greater than two years. <BR /><BR />If, for example, you select the measure 'Count of Children in Out-of-Home Care,' and filter for January 1, 2004 and ‘episode duration greater than one year,’ the data returned will indicate the number of children in out-of-home care who were in care longer than one year within the out-of-home care episode that included January 1, 2004. ",
+        "sp_ooh_reentry": "<EM>Episodes</EM> or <EM>stays</EM> in out-of-home care start with a child’s removal from home and end with their return home (or to another permanent outcome).  A child can be placed more than once within an episode, e.g., a child may first be placed in a foster home, and then in the care of a relative before reunification with a parent, which ends the episode. <BR /><BR />The Out-of-Home Safety measure provides <EM>cohort </EM> percentages of re-entries into out-of-home care by month since exiting care. The ‘duration of out-of-home stay’ filter provides the option to examine re-entries for children who had an out-of-home care episode that lasted: greater than seven days; greater than 60 days; greater than one year; or greater than two years.<BR /><BR /> If, for example, you filter for exit year 2004 and ‘episode duration greater than 60 days,’ the data returned will indicate the percentage of children re-entering out-of-home care (by the number of months since exiting care in 2004) who had an episode that started any time in 2004 and lasted longer than 60 days. If there were more than one episode in 2004 that lasted longer than 60 days, both episodes will be counted. ",
+        "sp_ooh_outcomes": "<EM>Episodes</EM> or <EM>stays</EM> in out-of-home care start with a child’s removal from home and end with their return home (or to another permanent outcome).  A child can be placed more than once within an episode, e.g., a child may first be placed in a foster home, and then in the care of a relative before reunification with a parent, which ends the episode. <BR /><BR />The Out-of-Home Outcomes measure provides <EM>cohort</EM> percentages of children who exited to reunification, adoption, or guardianship. The ‘duration of out-of-home stay’ filter provides the option to examine exits for children who had been in an out-of-home care episode that lasted:  greater than seven days; greater than 60 days; greater than one year; or greater than two years.<BR /><BR />If, for example, you filter for entry year 2004 and ‘episode duration greater than 60 days,’ the data returned will indicate the percentage of children by outcome (and by the number of months since entering care in 2004) who had an episode that started any time in 2004 that lasted longer than 60 days. If there were more than one episode in 2004 that lasted longer than 60 days, both episodes will be counted. ",
+        "sp_ooh_wb_familysettings": "<EM>Episodes</EM> or <EM>stays</EM> in out-of-home care start with a child’s removal from home and end with their return home (or to another permanent outcome). A child can be placed more than once within an episode, e.g., a child may first be placed in a foster home, and then in the care of a relative before reunification with a parent, which ends the episode.<BR /><BR /> The Well-Being measures provide <EM>point-in-time</EM> data on placements in family settings and with siblings. The ‘duration of out-of-home stay’ filter provides the option to examine the number of placements in a family setting or with siblings for children who had been in an out-of-home care episode that lasted:  greater than seven days; greater than 60 days; greater than one year, or greater than two years.<BR /><BR />If, for example,  you select the measure ‘Placement in Family Settings on the 1st Day of the Year,’ and filter for ‘episode duration greater than one year,’ the data returned will indicate the number of children placed in various settings, including family setting, whose episode than included January 1, 2004 was longer than one year.",
+        "sp_ooh_wb_siblings_by_year": "<EM>Episodes</EM> or <EM>stays</EM> in out-of-home care start with a child’s removal from home and end with their return home (or to another permanent outcome). A child can be placed more than once within an episode, e.g., a child may first be placed in a foster home, and then in the care of a relative before reunification with a parent, which ends the episode. <BR /><BR />The Well-Being measures provide <EM>point-in-time</EM> data on placements in family settings and with siblings. The ‘duration of out-of-home stay’ filter provides the option to examine the number of placements in a family setting or with siblings for children who had been in an out-of-home care episode that lasted:  greater than seven days; greater than 60 days; greater than one year, or greater than two years.<BR /><BR />If, for example,  you select the measure ‘Placement in Family Settings on the 1st Day of the Year,’ and filter for ‘episode duration greater than one year,’ the data returned will indicate the number of children placed in various settings, including family setting, whose episode than included January 1, 2004 was longer than one year. ",
+        "sp_ooh_wb_siblings_by_sibgroup": "<EM>Episodes</EM> or <EM>stays</EM> in out-of-home care start with a child’s removal from home and end with their return home (or to another permanent outcome). A child can be placed more than once within an episode, e.g., a child may first be placed in a foster home, and then in the care of a relative before reunification with a parent, which ends the episode. <BR /><BR />The Well-Being measures provide <EM>point-in-time</EM> data on placements in family settings and with siblings. The ‘duration of out-of-home stay’ filter provides the option to examine the number of placements in a family setting or with siblings for children who had been in an out-of-home care episode that lasted:  greater than seven days; greater than 60 days; greater than one year, or greater than two years.<BR /><BR />If, for example,  you select the measure ‘Placement in Family Settings on the 1st Day of the Year,’ and filter for ‘episode duration greater than one year,’ the data returned will indicate the number of children placed in various settings, including family setting, whose episode than included January 1, 2004 was longer than one year."
+      }
+    }
+  },
+  "dependency_cd": {
+    "table": "ref_filter_dependency",
+    "display": {
+      "legend": "Court Involvement",
+      "column": "advancedFields",
+      "type": "filter",
+      "multi": true,
+      "selected": 0,
+      "visible": false,
+      "help": "The courts become involved when there is a <A href='/http://partnersforourchildren.org/resources/glossary/d#165' target=_blank>dependency</A> proceeding or action. A dependent child is one who was abandoned, abused or neglected, or whose parents are incapable of adequately parenting.<BR /><BR />In this filter, ‘Immediate Dependency’  means a dependency petition was filed within seven days and approved within 79 days of the start of the out-of-home episode.‘Eventual Dependency’ means the petition was approved more than 86 days (7 days plus 79) after the start of the episode. (Seventy-nine days is the average number of days for a petition to be approved)."
+    }
+  },
+  "ihs_services_ooh": {
+    "table": "ref_filter_ihs_services",
+    "display": {
+      "legend": "In-Home Services",
+      "column": "advancedFields",
+      "type": "param",
+      "multi": true,
+      "selected": 0,
+      "visible": false,
+      "help": "Some in-home services are paid by the Department of Children, Youth, and Families (DCYF) and some are not covered. Examples of paid services include case management and certain behavioral rehabilitation services. DCYF-paid services can be directly linked to a child or a family. Services that are not paid for by DCYF cannot be linked to a child or family; are purchased in bulk; or are provided by a service provider or any entity other than DCYF (e.g., health care, employment services)."
+    }
+  },
+  "yearPIT": {
+    "values": {
+      "2000": 2000,
+      "2001": 2001,
+      "2002": 2002,
+      "2003": 2003,
+      "2004": 2004,
+      "2005": 2005,
+      "2006": 2006,
+      "2007": 2007,
+      "2008": 2008,
+      "2009": 2009,
+      "2010": 2010,
+      "2011": 2011,
+      "2012": 2012,
+      "2013": 2013,
+      "2014": 2014,
+      "2015": 2015,
+      "2016": 2016,
+      "2017": 2017,
+      "2018": 2018,
+      "2019": 2019
+    },
+    "date": true,
+    "display": {
+      "legend": "First Day of Year",
+      "column": "dateFields",
+      "type": "filter",
+      "multi": true,
+      "selected": "2019",
+      "resultUnavailable": "disable",
+      "help": ""
+    }
+  },
+  "cohort_year": {
+    "values": {
+      "2000": 2000,
+      "2001": 2001,
+      "2002": 2002,
+      "2003": 2003,
+      "2004": 2004,
+      "2005": 2005,
+      "2006": 2006,
+      "2007": 2007,
+      "2008": 2008,
+      "2009": 2009,
+      "2010": 2010,
+      "2011": 2011,
+      "2012": 2012,
+      "2013": 2013,
+      "2014": 2014,
+      "2015": 2015,
+	    "2016": 2016,
+	    "2017": 2017,
+      "2018": 2018
+    },
+    "display": {
+      "legend": "Entry Cohort Year",
+      "column": "dateFields",
+      "type": "filter",
+      "multi": true,
+      "selected": "2015",
+      "alias": "Cohort Period",
+      "help": "The entry cohort is that group of children who entered out-of-home care in the selected year(s). ‘Entry Cohort Year’ choices begin January 2000 and end on the most recent year for which we have data. The default date is set four years earlier than the most recent year and returns result for 48 months. If a year that was less than 48 ago is selected, the line graph and the data will be truncated."
+    }
+  },
+  "cohort_year_ia_safety": {
+    "values": {
+      "2006": 2006,
+      "2007": 2007,
+      "2008": 2008,
+      "2009": 2009,
+      "2010": 2010,
+      "2011": 2011,
+      "2012": 2012,
+      "2013": 2013,
+      "2014": 2014,
+	    "2015": 2015
+    },
+    "display": {
+      "legend": "Investigation/Assessment Cohort Period",
+      "column": "dateFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": true,
+      "selected": "2014",
+      "alias": "Cohort Period",
+	  "resultUnavailable": "disable",
+      "help": "This filter allows you to follow households with at least one child involved in an investigation/assessment from 2006 to the most recent available data. Data on the percent of households with children re-referred are returned in three month increments for up to 48 months following the selected cohort year. If the selected year is less than 48 months in the past, the line graph and the data will be truncated."
+    }
+  },
+  "cohort_year_ooh_safety": {
+    "values": {
+      "2000": 2000,
+      "2001": 2001,
+      "2002": 2002,
+      "2003": 2003,
+      "2004": 2004,
+      "2005": 2005,
+      "2006": 2006,
+      "2007": 2007,
+      "2008": 2008,
+      "2009": 2009,
+      "2010": 2010,
+      "2011": 2011,
+      "2012": 2012,
+      "2013": 2013,
+      "2014": 2014,
+	  "2015": 2015,
+	  "2016": 2016,
+	  "2017": 2017
+    },
+    "display": {
+      "legend": "Exit Cohort Year",
+      "column": "dateFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": false,
+      "selected": "2013",
+      "resultUnavailable": "disable",
+      "help": "The exit cohort is that group of children who exited out-of-home care in the selected year(s). ‘Exit Cohort Year’ choices begin January 2000 to the most recent available data. Data on the percent of children who have re-entered out-of-home care are available in three month increments for up to 48 months following the selected cohort year. If the selected year is fewer than 48 months ago, the line graph and the data will be truncated."
+    }
+  },
+  "cohort_year_graduation": {
+    "values": {
+      "2002": "2006",
+      "2003": "2007",
+      "2004": "2008",
+      "2005": "2009",
+      "2006": "2010",
+      "2007": "2011",
+      "2008": "2012",
+      "2009": "2013"
+    },
+    "display": {
+      "legend": "Expected High School Graduation Year",
+      "column": "dateFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": false,
+      "selected": 2007,
+      "visible": true,
+      "resultUnavailable": "hide",
+      "help": "This filter indicates that students have been followed from the year they entered high school (2006 and 2007) through their expected graduation year (2010 and 2011) and for an additional year."
+    }
+  },
+  "dynamicMonthStart": {
+    "date": true,
+    "display": {
+      "legend": "Date Range",
+      "column": "dateFields",
+      "type": "dynamicDateRange",
+      "monthStep": 1,
+      "monthLimit": 0,
+      "help": "The minimum and maximum date for which reliable data are available are indicated on the slide bar. You can adjust the bar to any range for viewing the Graph. The Table will always display the (default) complete date range. "
+    }
+  },
+  "removalCounty": {
+    "table": "ref_lookup_county",
+    "display": {
+      "legend": "Removal County",
+      "column": "locationFields",
+      "type": "param",
+      "visible": false,
+      "help": "This is the county the data suggests the child lived in prior to removal. You can select any of Washington State’s 39 counties; ‘All’ (the default) returns statewide data."
+    }
+  },
+  "pitCounty": {
+    "table": "ref_lookup_county",
+    "display": {
+      "legend": "Placement County",
+      "column": "locationFields",
+      "type": "param",
+      "visible": false,
+      "help": "This is the county the child was placed in on this date. You can select any of Washington State’s 39 counties; ‘All’ (default) returns statewide data."
+    }
+  },
+  "exitCounty": {
+    "table": "ref_lookup_county",
+    "display": {
+      "legend": "Exit County",
+      "column": "locationFields",
+      "type": "param",
+      "visible": false,
+      "help": "The location of the child when s/he received a federal discharge (reunification, adoption, guardianship) or was emancipated (turned 18 years old)."
+    }
+  },
+  "exitCounty_devAge": {
+    "table": "ref_lookup_county",
+    "display": {
+      "legend": "Exit County",
+      "column": "locationFields",
+      "type": "param",
+      "visible": false,
+      "help": "The location of the child when s/he received a federal discharge (reunification, adoption, guardianship) or was emancipated (turned 18 years old)."
+    }
+  },
+  "Ref_Serv_County": {
+    "table": "ref_lookup_county",
+    "display": {
+      "legend": "Reporting County",
+      "column": "locationFields",
+      "type": "param",
+      "visible": false,
+      "help": "This is the county where the report was investigated/assessed. You can select any of Washington State’s 39 counties; ‘All’ (the default) returns statewide data."
+    }
+  },
+  "disability": {
+    "table": "ref_lookup_disability",
+    "display": {
+      "legend": "Disability",
+      "column": "demographicFields",
+      "type": "filter",
+      "multi": true,
+      "selected": 0,
+      "visible": true,
+      "help": "A disability is defined here in the broadest sense. That is, a disability is any condition that interferes with a child’s ability to learn; therefore, a disability can be a learning disability, a physical disability, or a combination of disabilities. For more information about disabilities, see this document from the <A href='http://www.k12.wa.us/specialed/pubdocs/sld_guide.pdf' target=_blank>State Superintendent of Public Instruction</A>."
+    }
+  },
+  "movement_category": {
+    "values": {
+      "0": "All",
+	  "1": "Placement Move to Kin Care",
+      "2": "Placement Move to Foster Care",
+      "3": "Placement Move to Group Care"
+    },
+    "display": {
+      "legend": "Placement Move Type",
+      "column": "displayFields",
+      "type": "filter",
+      "multi": true,
+      "sort": true,
+      "selected": 0,
+      "visible": true,
+      "help": "This measure allows for a calculation of movement between the three most common types of placement: foster care, kin care, and group care."
+    }
+  },
+  "third_grade_year": {
+    "values": {
+      "2006": "2006",
+      "2007": "2007",
+      "2008": "2008"
+    },
+    "display": {
+      "legend": "Third Grade Entry Year",
+      "column": "dateFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": false,
+      "selected": 2008,
+      "visible": true,
+      "resultUnavailable": "disable",
+      "help": "This filter references the school year (2006/07, 2007/08, and 2008/09) that students in the 3rd grade took the <A href='http://www.k12.wa.us/assessment/StateTesting/MSP.aspx'target=_blank>Measurements of Student Progress</A> (MSP) literacy proficiency test."
+    }
+  },
+  "student_type": {
+    "values": {
+      "0": "Not in Out-of-Home Care",
+      "1": "Not in Care: Receiving Free or Reduced-Price Lunch",
+      "2": "In Out-of-Home Care"
+    },
+    "display": {
+      "legend": "Student Type",
+      "column": "demographicFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": false,
+      "sort": true,
+      "selected": 2,
+      "visible": true,
+      "resultUnavailable": "show",
+      "help": "This filter classifies students into three categories: 1) those in out-of-home care AND receiving free or reduced-price lunches; 2) those NOT in out-of-home care AND receiving free or reduced-price lunches; and 3) those NOT in out-of-home care AND NOT receiving free or reduced-price lunches. "
+    }
+  },
+  "region": {
+    "values": {
+      "0": "Washington State",
+      "1": "Region 1",
+      "2": "Region 2",
+      "3": "Region 3",
+      "4": "Region 4",
+      "5": "Region 5",
+      "6": "Region 6"
+    },
+    "display": {
+      "legend": "Region",
+      "column": "locationFields",
+      "type": "filter",
+      "multi": true,
+      "selected": 0,
+      "visible": true,
+      "help": "The Department of Children, Youth, and Families is divided into <A href='https://www.dcyf.wa.gov/sites/default/files/pdf/DCYFMap-offices.pdf' target=_blank>six geographical Regions</A>."
+    }
+  },
+  "otr_age_in_care": {
+    "values": {
+      "4": "Age 13",
+      "3": "Age 14",
+      "2": "Age 15",
+      "1": "Age 16",
+      "0": "Age 17"
+    },
+    "display": {
+      "legend": "Age",
+      "column": "demographicFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": false,
+      "sort": true,
+      "selected": 0,
+      "visible": true,
+      "help": "This is the child's age in the State Fiscal Year."
+    }
+  },
+  "access_type_mp": {
+    "values": {
+      "1": "Child Protective Services (CPS)",
+      "4": "Risk Only",
+      "5": "Child Family Welfare Services (CFWS)",
+      "6": "Family Assessment Response (FAR)",
+      "0": "All"
+    },
+    "display": {
+      "legend": "Entry Point",
+      "column": "displayFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": true,
+      "selected": 0,
+      "disabled": [
+        6
+      ],
+      "visible": true,
+      "help": "You can filter for three primary entry points in the child welfare system, i.e., first point of contact with the Department of Children, Youth, and Families. Currently, the Data Portal returns data for: <BR /><BR />1) <A href='http://partnersforourchildren.org/resources/glossary/c#159' target=_blank>Child Protective Services</A> (CPS), which provides 24 hour, seven days a week intake, screening, and investigative services for reports of alleged child abuse and neglect; <BR /><BR />2) <A href='http://www.dshs.wa.gov/CA/pubs/mnl_pnpg/chapter2.asp' target=_blank>Risk Only</A>, a referral made when information collected gives reasonable cause to believe that risk or safety factors exist that place the child at imminent risk of serious harm; and <BR /><BR />3) <A href='http://partnersforourchildren.org/resources/glossary/c#155' target=_blank>Child and Family Welfare Services</A> (CFWS), which provides both permanency planning and court-ordered services to children and families to mitigate the risk of abuse or neglect so that children are able to safely return to their home of origin. <A href='http://partnersforourchildren.org/resources/glossary/f#190' target=_blank>Family Assessment Response</A> (FAR), a new alternative pathway for accepted reports of low-to-moderate risk of child maltreatment, is grayed out because the number of cases that enter through this programs is still small."
+    }
+  },
+  "order": {
+    "values": {
+      "0": "Zero",
+      "1": "One",
+      "2": "Two"
+    },
+    "display": {
+      "legend": "Prior Number",
+      "column": "displayFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": false,
+      "selected": 0,
+      "visible": true,
+      "help": "This is the number of prior report(s), screened-in report(s), or out-of-home placement(s). "
+    }
+  },
+  "years_in_care": {
+    "table": "ref_lookup_years_in_care",
+    "display": {
+      "legend": "Years in Care",
+      "column": "dateFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": false,
+      "selected": 0,
+      "visible": true,
+      "help": "This filter calculates the number of years in out-of-home care per episode. Children can have multiple episodes. Each episode ends with a Federal discharge date and can include multiple placements."
+    }
+  },
+  "cohort_year_grad_college": {
+    "values": {
+      "2006": "2010",
+      "2007": "2011",
+      "2008": "2012"
+    },
+    "display": {
+      "legend": "College Graduation Year",
+      "column": "dateFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": false,
+      "selected": 2007,
+      "resultUnavailable": "hide",
+      "help": "This is a static filter that returns college completion results for all high school seniors in the 2006/07 graduation class.  "
+    }
+  },
+  "HS_grad_yr": {
+    "values": {
+      "2006": "2007",
+      "2007": "2008",
+      "2008": "2009"
+    },
+    "display": {
+      "legend": "High School Graduation Year",
+      "column": "dateFields",
+      "type": "filter",
+      "multi": true,
+      "zeroLast": false,
+      "selected": 2008,
+      "visible": true,
+      "resultUnavailable": "hide",
+      "help": "This filter tracks students who entered 12th grade in 2006, 2007, and 2008 and graduated in 2007, 2008, and 2009.  "
+    }
+  }
+}

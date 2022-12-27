@@ -1,0 +1,161 @@
+```{r, include=FALSE}
+library(pocr)
+library(lubridate)
+library(RODBC)
+library(dplyr)
+library(stringr)
+
+con <- odbcConnect("test_annie")
+
+results <- sqlQuery(con, "call sp_mp_rate_placement_ts()")
+names(results) <- make.names(str_replace_all(tolower(names(results)), '\\(|\\)', ''))
+
+# code for highlights
+min_data <- filter(results, region == 0, access.type == 0, month.year.of.placement == min(month.year.of.placement))
+max_data <- filter(results, region == 0, access.type == 0, month.year.of.placement == max(month.year.of.placement))
+
+# close connection
+odbcCloseAll()
+```
+{  
+   "title":"Placement Rate",
+   "subtitle":"Per 1,000 Households with a Screened-In Report",
+   "img":"",
+   "type":"visualization",
+   "visualizationType":"graph",
+   "tags":[  
+      "safety",
+      "annual report",
+      "region",
+      "out-of-home",
+      "placement",
+      "foster care",
+      "cps"
+   ],
+   "keywords": [
+      "intakes",
+      "referrals"
+   ],
+   "blurb":"Screened-in reports that led to out-of-home placement.",
+   "slug":"placement-rate",
+   "unit":"Households with Placement per 1,000 Screened-In Reports",
+   "config":{  
+      "table":"sp_mp_rate_placement_ts",
+      "transform":{  
+         "Function":"daterow",
+         "dateField":"Month/Year of Placement",
+         "valueFields":[  
+            "Scatterplot (Actual Values)",
+            "Trend Line (Seasonally Adjusted)"
+         ],
+         "removeFields":[]
+      },
+      "controls":[  
+         "region",
+         "access_type_mp"
+      ],
+      "params":[],
+      "dateParams":[],
+      "requiredParams":[],
+      "showAllOthers":true,
+      "returnRowHeaders":[  
+         0,
+         1,
+         2
+      ],
+      "returnRowDateHeaders":[  
+         0
+      ],
+      "returnRowControlHeaders":[  
+         1,
+         2
+      ],
+      "headerNames":[  
+         "&nbsp;",
+         "Region*region",
+         "Access Type*access_type_mp"
+      ],
+      "returnRowStart":3,
+      "hideRow":"allEmpty",
+      "columnClusterSize":2,
+      "numberFormat":[  
+         {  
+            "fractionDigits":2
+         }
+      ],
+      "multicharts":{  
+         "Trend-Line":[  
+            {  
+               "chartType":"line",
+               "chartId":"chart1",
+               "labels":{  
+                  "x":"",
+                  "y":""
+               },
+               "hideColumns":[  
+                  0
+               ]
+            }
+         ],
+         "Trend-Line-with-Scatterplot":[  
+            {  
+               "chartType":"combo",
+               "chartId":"chart1",
+               "labels":{  
+                  "x":"",
+                  "y":""
+               },
+               "hideColumns":[]
+            }
+         ],
+         "Scatterplot":[  
+            {  
+               "chartType":"scatterChart",
+               "chartId":"chart1",
+               "labels":{  
+                  "x":"",
+                  "y":""
+               },
+               "hideColumns":[  
+                  1
+               ]
+            }
+         ]
+      }
+   }
+}
+
+### Data Highlights
+
+<div class="stat">
+    <h4>`r pretty_date(max_data$month.year.of.placement)`</h4>
+    <p>`r round(max_data$scatterplot.actual.values)`</p>
+</div>
+
+<div class="stat">
+    <h4>`r pretty_date(min_data$month.year.of.placement)`</h4>
+    <p>`r round(min_data$scatterplot.actual.values)`</p>
+</div>
+
+### Summary
+
+This graph shows the rate at which screened-in reports---reports that receive an investigation or other service---led to an out-of-home placement.
+
+#### Questions this graph can answer
+
+- What has been the risk that a household that received an investigation or other service eventually had an out-of-home placement following a screened-in report?
+
+- Which regions had the highest and lowest rates of placement?
+
+#### See also
+
+- [Screening Rate](https://portal.cssat.org/visualizations/screening-rate), for the rate at which reports were screened-in for investigation or other services.
+
+- [Out-of-Home Entries (Rates)](https://portal.cssat.org/visualizations/ooh-entry-rates), for the population-based rate of placements.
+
+### Notes
+
+A household is considered to have a placement if *one or more* children in the household entered out-of-home care.
+
+Additional reports are only counted if there has been more than 48 hours since the previous report about the same household.
+

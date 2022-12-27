@@ -1,0 +1,120 @@
+```{r, include = FALSE}
+
+library(readr)
+library(dplyr)
+
+# Data integration on this will wait until either
+#  - the map data is in version control accessible in another repo
+#  - the map data is available as a SQL table
+# high_region = "Region 4"
+# high_value = formatC(signif(418141, 3), big.mark = ",", format = "d")
+# low_region = "Region 2"
+# low_value = formatC(signif(175566, 3), big.mark = ",", format = "d")
+
+setwd("../../..")
+
+setwd("data/maps/")
+
+# importing data
+
+child_pop_dat <-  
+  read_csv("ooh_population_regions.csv")
+
+# getting max date
+
+max_date <- max(child_pop_dat$date)
+
+# getting population change
+
+child_pop_change <- 
+  filter(child_pop_dat
+         , date %in% c(2006, max_date)
+         , ageCensus == 0
+         , ethnicityCensus == 0) %>%
+  group_by(geog) %>%
+  mutate(datacol = (datacol - lead(datacol)) / datacol
+         , pretty_datacol = paste0(round(datacol * 100, 1), '%')
+         , pretty_geog = paste("Region", geog)
+         ) %>%
+  filter(date == max_date) %>%
+  group_by(date) %>%
+  mutate(rank = rank(datacol))
+
+# biggest changed
+
+max_change_value <- filter(child_pop_change, rank == max(rank))$`pretty_datacol`
+max_change_region <- filter(child_pop_change, rank == max(rank))$`pretty_geog`
+
+# smallest change
+
+min_change_value <- filter(child_pop_change, rank == min(rank))$`pretty_datacol`
+min_change_region <- filter(child_pop_change, rank == min(rank))$`pretty_geog`
+
+# getting total child pop
+
+total_child_pop <- 
+  filter(child_pop_dat
+         , date == max_date
+         , ageCensus == 0
+         , ethnicityCensus == 0) %>%
+  group_by(date) %>%
+  summarize(child_pop = sum(datacol)
+            , pretty_child_pop = prettyNum(child_pop, big.mark = ","))
+  
+
+```
+{
+	"title": "Count of All Children",
+	"subtitle": "",
+	"slug": "child-population",
+	"type": "visualization",
+	"visualizationType": "map",
+	"blurb": "Population map of children.",
+    "unit": "Population Under 18 (count)",
+    "tags": [
+	    "region",
+	    "county"
+	],
+	"related": [ "hh-population" ],
+	"config": {
+		"mapType": "Counts",
+		"defaultContext": "regions",
+		"file": "ooh_population",
+		"legendLabel": "Count"
+	}
+}
+
+
+### Data Highlights
+
+<div class="stat">
+  <h4>Change in Child Population Between 2006 and `r max_date`</h4>
+</div>
+
+<div class="stat">
+    <h4>Biggest Change</h4>
+    <p>`r max_change_region`: `r max_change_value`</p>
+</div>
+
+<div class="stat">
+    <h4>Smallest Change</h4>
+    <p>`r min_change_region`: `r min_change_value`</p>
+</div>
+
+<div class="stat">
+    <h4>Total Child<br>Population `r max_date`</h4>
+    <p>`r total_child_pop$pretty_child_pop`</p>
+</div>
+
+### Summary
+
+This graph shows the population data used to calculate population rates for children.
+Population counts are used as the denominators for all of the child-based rates.
+
+#### See also
+
+- [Map of Out-of-Home Entries](https://portal.cssat.org/visualizations/ooh-entries-map), for the rate at which children entered out-of-home care.
+
+### Notes
+
+We use data both from the US Census Bureau and Washington's Office of Financial Management and carefully fill in the gaps to produce this relatively complete picture of Washington State's population under age 18.

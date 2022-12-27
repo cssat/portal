@@ -1,0 +1,87 @@
+```{r, include = FALSE}
+
+# library(readr)
+# library(dplyr)
+
+# Data integration on this will wait until either
+#  - the map data is in version control accessible in another repo
+#  - the map data is available as a SQL table
+
+high_region = "Region 4"
+high_value = formatC(signif(212449, 3), big.mark = ",", format = "d")
+low_region = "Region 2"
+low_value = formatC(signif(72188, 3), big.mark = ",", format = "d")
+
+# setwd("../../..")
+
+# setwd("data/maps/")
+
+# child_hh_dat <-
+#   read_csv("C:/Users/oieeri26/Documents/GitHub/portal-content/data/maps/ia_population_counties.csv")
+  # read_csv("ia_population_regions.csv")
+
+# getting max date
+
+# max_date <- max(child_hh_dat$date)
+
+# getting population change
+
+# child_hh_pop_change <-
+#   filter(child_hh_dat
+#          , date %in% c(2006, max_date)
+#          , ageSib == 0
+#          , ethnicityCensus == 0
+#          ) %>%
+#   group_by(geog) %>%
+#   mutate(datacol2 = lead(datacol)
+#          , datacol3 = (datacol - lead(datacol)) / datacol
+#          ) %>%
+#   filter(date == 2018)
+
+```
+{
+	"title": "Count of All Households with Children",
+	"subtitle": "",
+	"slug": "hh-population",
+	"type": "visualization",
+	"visualizationType": "map",
+	"blurb": "Population map of households with children.",
+    "unit": "Households with Children",
+    "tags": [
+	    "region",
+	    "county"
+	],
+	"related": [ "ia-rates-opened", "child-population" ],
+	"config": {
+		"mapType": "Counts",
+		"defaultContext": "regions",
+		"file": "ia_population",
+		"legendLabel": "Count"
+	}
+}
+
+
+### Data Highlights
+
+<div class="stat">
+    <h4>Highest Population</h4>
+    <p>`r high_region`: `r high_value`</p>
+</div>
+
+<div class="stat">
+    <h4>Lowest Population</h4>
+    <p>`r low_region`: `r low_value`</p>
+</div>
+
+### Summary
+
+This shows the population data used to calculate household rates. 
+Population counts are the denominators for all the household-based rates.
+
+#### See also
+
+- [Map of Investigation & Assessments](https://portal.cssat.org/visualizations/ia-map), for the rate at which households were investigated & assessed following reports of possible child abuse or neglect.
+
+### Notes
+
+We used data both from the US Census Bureau and Washington's Office of Financial Management and carefully filled in the gaps to produce this relatively complete picture of Washington's population of households with children.

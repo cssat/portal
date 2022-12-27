@@ -1,0 +1,156 @@
+{  
+   "title":"Permanency Counts",
+   "subtitle":"Children Exiting Out-of-Home Care",
+   "img":"",
+   "type":"visualization",
+   "visualizationType":"graph",
+   "tags":[ 
+      "permanency",
+      "out-of-home",
+      "county",
+      "foster care",
+      "age",
+      "race/ethnicity",
+      "reunification",
+      "adoption"
+   ],
+   "keywords": [
+      "guardianship",
+      "emancipation",
+      "exits"
+   ],
+   "blurb":"Counts of children in out-of-home care who achieved permanency (reunification, adoption, guardianship, etc.), over time.",
+   "slug":"permanency-counts",
+   "unit":"Count",
+   "config":{  
+      "table":"sp_ooh_flow_exits",
+      "transform":{  
+         "Function":"daterow",
+         "dateField":"Cohort Period",
+         "valueFields":[  
+            "Number of Exits"
+         ],
+         "removeFields":[]
+      },
+      "controls":[  
+         "qry_type_exits",
+         "date_type_cohort",
+         "discharge_type_exits"
+      ],
+      "params":[  
+         "dynamicMonthStart",
+         "ageExits",
+         "ethnicityCensus",
+         "gender",
+         "initSetng",
+         "longSetng",
+         "exitCounty_devAge",
+         "ooh_los",
+         "nbr_placement",
+         "ihs_services_ooh",
+         "reporter_type",
+         "access_type",
+         "allegation",
+         "finding",
+         "dependency_cd"
+      ],
+      "dateParams":[],
+      "requiredParams":[  
+         "dynamicMonthStart"
+      ],
+      "showAllOthers":true,
+      "returnRowHeaders":[  
+         0,
+         1,
+         4,
+         6,
+         8,
+         10,
+         12,
+         14,
+         16,
+         18,
+         20,
+         22,
+         24,
+         26,
+         28,
+         30,
+         32
+      ],
+      "returnRowDateHeaders":[  
+         0
+      ],
+      "returnRowControlHeaders":[  
+         1
+      ],
+      "headerNames":[  
+         "&nbsp;",
+         "qry_type*qry_type_exits",
+         "Age Grouping=ageExits",
+         "Gender=gender",
+         "Race/Ethnicity",
+         "Initial Placement=initSetng",
+         "Longest Placement=longSetng",
+         "County=exitCounty_devAge",
+         "Dependency=dependency_cd",
+         "Length of Service Desc=ooh_los",
+         "Placement Count Desc=nbr_placement",
+         "In-Home Service Desc=ihs_services_ooh",
+         "Reporter Desc=reporter_type",
+         "Access type desc=access_type",
+         "Allegation=allegation",
+         "Finding=finding",
+         "cd_discharge_type*discharge_type_exits"
+      ],
+      "returnRowStart":33,
+      "hideRow":"allEmpty",
+      "chartType":"line",
+      "labels":{  
+         "x":"",
+         "y":""
+      },
+      "numberFormat":{  
+         "fractionDigits":0
+      }
+   }
+}
+
+
+### Data Highlights
+
+<div class="stat">
+    <h4>All Outcomes</h4>
+    <p>6,275</p>
+</div>
+
+<div class="stat">
+    <h4>Reunification</h4>
+    <p>3,776</p>
+</div>
+
+<div class="stat">
+    <h4>Adoption</h4>
+    <p>1,544</p>
+</div>
+
+### Summary
+
+This graph shows counts of children who exited out-of-home care to various permanency outcomes over the course of a year or quarter.
+
+#### Questions this graph can answer
+
+- How many children were adopted in recent years?
+
+- What was the most common permanency outcome for children under age 5?
+
+
+#### See also
+
+- [Permanency Outcomes (Cohort)](https://portal.cssat.org/visualizations/permanency-cohort), for a cohort-based look at permanency outcomes. 
+
+### Notes 
+
+A 'trial return home' has not been counted as a permanency outcome in this measure.
+
+By default, all permanency outcomes for all episodes were counted. To select only out-of-home care episodes lasting more than one week, use the advanced filter *duration of out-of-home stay*.

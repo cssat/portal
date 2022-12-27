@@ -1,0 +1,125 @@
+```{r, include=FALSE}
+library(pocr)
+library(lubridate)
+library(RODBC)
+library(dplyr)
+library(stringr)
+
+con <- odbcConnect("test_annie")
+
+results <- sqlQuery(con, "call sp_mp_rate_care_day_maltreatment_limits('0');")
+names(results) <- make.names(str_replace_all(tolower(names(results)), '\\(|\\)|:', ''))
+results = mutate(results, rate = round(rate, 1))
+
+# code for highlights
+
+recent_data <- filter(results, region == 0, fiscal.year == max(fiscal.year))
+low_rate <- filter(results, region == 0) %>% arrange(rate, desc(fiscal.year)) %>% slice(1)
+high_rate <- filter(results, region == 0) %>% arrange(desc(rate), desc(fiscal.year)) %>% slice(1)
+
+# close connection
+odbcCloseAll()
+```
+{  
+   "title":"Substantiated Maltreatment While in Care",
+   "subtitle":"Rate per 100,000 Care-Days",
+   "img":"",
+   "type":"visualization",
+   "visualizationType":"graph",
+   "tags":[  
+      "safety",
+      "annual report",
+      "maltreatment",
+      "region",
+      "out-of-home",
+      "foster care",
+      "cps",
+      "cfsr"
+   ],
+   "blurb":"Rate of substantiated allegations of abuse or neglect for children in out-of-home care.",
+   "slug":"maltreatment-in-care",
+   "unit":"Substantiations of Maltreatment per 100,000 Care-Days",
+   "config":{  
+      "table":"sp_mp_rate_care_day_maltreatment_limits",
+      "transform":{  
+         "Function":"daterow",
+         "dateField":"Fiscal Year",
+         "valueFields":[  
+            "Rate"
+         ],
+         "removeFields":[]
+      },
+      "controls":[  
+         "region"
+      ],
+      "params":[  
+         "dynamicMonthStart"
+      ],
+      "dateParams":[],
+      "requiredParams":[  
+         "dynamicMonthStart"
+      ],
+      "showAllOthers":true,
+      "returnRowHeaders":[  
+         0,
+         1
+      ],
+      "returnRowDateHeaders":[  
+         0
+      ],
+      "returnRowControlHeaders":[  
+         0,
+         1
+      ],
+      "headerNames":[  
+         "&nbsp;",
+         "Region*region"
+      ],
+      "returnRowStart":2,
+      "chartType":"line",
+      "labels":{  
+         "x":"",
+         "y":""
+      },
+      "numberFormat":{  
+         "fractionDigits":2
+      }
+   }
+}
+
+### Data Highlights
+
+<div class="stat">
+    <h4>Recent: `r pretty_date(recent_data$fiscal.year)`</h4>
+    <p>`r recent_data$rate`</p>
+</div>
+
+<div class="stat">
+    <h4>Low: `r pretty_date(low_rate$fiscal.year)`</h4>
+    <p>`r low_rate$rate`</p>
+</div>
+
+<div class="stat">
+    <h4>High: `r pretty_date(high_rate$fiscal.year)`</h4>
+    <p>`r high_rate$rate`</p>
+</div>
+
+### Summary
+
+This graph shows the number of substantiated reports of abuse or neglect per 100,000 care-days provided by Children's Administration. It can be interpreted as the probability that a child will be maltreated on a given day in care (if divided by 100,000).
+
+#### Questions this graph can answer
+
+- How safe have children in out-of-home care been?
+
+- How often have children in out-of-home care been abused or neglected while in care?
+
+#### See also
+
+- [Placements in Family Settings](https://portal.cssat.org/visualizations/family-settings), for a comparison of the types of family settings that children are placed in.
+
+- [Siblings by Number of Siblings](https://portal.cssat.org/visualizations/siblings-number), for the percentage of siblings placed together on a particular day, with a breakdown by the number of children in the family.
+
+### Notes 
+
+These rates have been calculated by dividing the number of substantiated cases of maltreatment among children in out-of-home care in a given year by the number of out-of-home care-days for all children for that year, times 100,000. As a point of reference, approximately 2.9 million care-days were provided in 2013; 100,000 care-days represent 3% to 4% of the care-days provided in a year.

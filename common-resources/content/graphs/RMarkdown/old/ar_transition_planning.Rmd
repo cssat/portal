@@ -1,0 +1,107 @@
+```{r,include=FALSE}
+library(pocr)
+library(RODBC)
+library(lubridate)
+library(stringr)
+
+con <- odbcConnect("test_annie")
+
+results <- sqlQuery(con, "call sp_mp_adult_readiness()")
+names(results) <- make.names(str_replace(tolower(names(results)), '>', ''))
+
+# code to get data for the oldest year of data
+
+min_year <- year(min(results[,'fiscal.year.year.youth.17.5.years.old']))
+
+min_year_dat <- round(filter(results, region == 0) %>% filter(fiscal.year.year.youth.17.5.years.old == min(fiscal.year.year.youth.17.5.years.old)) %>% select(percent))
+
+# code to get data for the most recent year of data
+
+max_year <- year(max(results[,'fiscal.year.year.youth.17.5.years.old']))
+max_year_dat <- round(filter(results, region == 0) %>% filter(fiscal.year.year.youth.17.5.years.old == max(fiscal.year.year.youth.17.5.years.old)) %>% select(percent))
+
+# close connection
+odbcCloseAll()
+```
+{  
+   "title":"Adult-Transition Planning",
+   "subtitle":"Among Youth > 17.5 Years Old",
+   "img":"ar-wellbeing-spt.png",
+   "type":"visualization",
+   "visualizationType":"graph",
+   "tags":[  
+      "well-being",
+      "region",
+      "annual report",
+      "out-of-home",
+      "foster care"
+   ],
+   "keywords":[
+      "emancipation",
+      "aging out"
+   ],
+   "blurb":"Percentage of youth in care who had a planning meeting about their career, education, housing, etc.",
+   "slug":"transition-planning",
+   "unit":"Percent",
+   "config":{  
+      "table":"sp_mp_adult_readiness",
+      "transform":{  
+         "Function":"daterow",
+         "dateField":"Fiscal Year/Year Youth >17.5 Years Old",
+         "valueFields":[  
+            "Percent"
+         ],
+         "removeFields":[]
+      },
+      "controls":[  
+         "region"
+      ],
+      "params":[],
+      "dateParams":[],
+      "requiredParams":[],
+      "showAllOthers":true,
+      "returnRowHeaders":[  
+         1
+      ],
+      "returnRowDateHeaders":[],
+      "returnRowControlHeaders":[  
+         1
+      ],
+      "headerNames":[  
+         " ",
+         "Region*region"
+      ],
+      "returnRowStart":2,
+      "chartType":"column",
+      "labels":{  
+         "x":"",
+         "y":"",
+         "yFormat":"##'%"
+      },
+      "numberFormat":{  
+         "fractionDigits":2,
+         "suffix":"%"
+      }
+   }
+}
+
+### Data Highlights
+
+<div class="stat">
+    <h4>Fiscal Year `r max_year`</h4>
+    <p>`r max_year_dat`%</p>
+</div>
+
+<div class="stat">
+    <h4>Fiscal Year `r min_year`</h4>
+    <p>`r min_year_dat`%</p>
+</div>
+
+### Summary
+
+Youth in out-of-home care are expected to have an adult-transition meeting when they turn 17.5. The youth, the caseworker, and possibly other individuals, such as family members, come together to develop a plan for the youth's transition to adulthood.
+
+#### Questions this graph can answer
+
+- Has the adult-transition planning program for youth in out-of-home care met expectations?
+

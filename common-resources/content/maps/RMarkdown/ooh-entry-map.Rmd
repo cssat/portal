@@ -1,0 +1,110 @@
+```{r, include = FALSE}
+#library(dplyr)
+#library(pocr)
+
+# at this point the only way I see to build in a data link is to use a token in the URL, which seems
+# unsafe.
+
+#regions = read.csv("https://raw.githubusercontent.com/pocdata/d3_maps/master/public/data/ooh_entry_rates_regions.csvTOKEN")
+
+# highlight = regions %>% filter(date == max(date), ageCensus == 0, ethnicityCensus == 0) %>%
+#     rename(region_6_cd = geog) %>%
+#     left_join({
+#         ref_lookup_county_region %>%
+#             group_by(region_6_cd) %>%
+#             summarize(region = first(region_6_tx))
+#     }, by = "region_6_cd") %>%
+#     arrange(datacol)
+# 
+# high = tail(highlight, 1)
+# low = head(highlight, 1)
+
+high_region = "Region"
+high_value = round(5.93, 1)
+low_region = "Region 4"
+low_value = round(2.7, 1)
+
+library(readr)
+library(dplyr)
+
+setwd("../../..")
+
+setwd("data/maps/")
+
+# importing data
+
+entry_rates_dat <-  
+  # read_csv("C:/Users/oieeri26/Documents/GitHub/portal-content/data/maps/ooh_entry_rates_regions.csv") 
+  read_csv("ooh_entry_rates_regions.csv")
+
+# get highest and lowest rates
+
+recent_entry_rates <- 
+  filter(entry_rates_dat
+         , date == max(date)
+         , ageCensus == 0
+         , ethnicityCensus == 0
+         )
+  
+# highest rate
+
+max_rate <- recent_entry_rates[recent_entry_rates$datacol == max(recent_entry_rates$datacol),]
+
+# lowest rate
+
+min_rate <- recent_entry_rates[recent_entry_rates$datacol == min(recent_entry_rates$datacol),]
+
+```
+{
+	"slug": "ooh-entries-map",
+	"title": "Out-of-Home Entries",
+	"subtitle": "Rates by Region and County",
+	"visualizationType": "map",
+	"blurb": "Map of entries into out-of-home care.",
+	"tags": [
+	    "region",
+	    "county"
+	],
+	"unit": "Rate per 1,000 Children",
+	"keywords": [
+	    "foster care"
+	],
+	"related": [ "child-population", "sp_ooh_flow_entries_rates" ],
+	"type": "map",
+	"config": {
+		"mapType": "Rates",
+		"defaultContext": "regions",
+		"file": "ooh_entry_rates",
+		"legendLabel": "Rate per 1,000 Children"
+	}
+}
+
+### Data Highlights
+
+<div class="stat">
+    <h4>`r unique(recent_entry_rates$date)`</h4>
+</div>
+
+<div class="stat">
+    <h4>Highest Rate</h4>
+    <p>`r paste("Region", max_rate$geog)`: `r round(max_rate$datacol, 1)`</p>
+</div>
+
+<div class="stat">
+    <h4>Lowest Rate</h4>
+    <p>`r paste("Region", min_rate$geog)`: `r round(min_rate$datacol, 1)`</p>
+</div>
+
+### Summary
+
+This map shows the rate at which children entered out-of-home care by region or county.
+All entries into out-of-home care were counted in this measure, including voluntary placements and short stays in care.
+
+#### See also
+
+- [Out-of-Home Placement (Rate)](https://portal.cssat.org/visualizations/ooh-entry-rates), for the same data in a graph format, with more filtering options.
+
+### Notes
+
+Small counties often have very volatile data - high one year, low the next - due to the small population sizes. Don't read too much into data from small counties unless patterns are consistent across years.
+

@@ -1,0 +1,181 @@
+```{r, include=FALSE}
+library(pocr)
+library(lubridate)
+library(RODBC)
+library(dplyr)
+library(stringr)
+
+# annie <- odbcConnect("test_annie")
+
+source("select_db.R")
+
+sp_call <- stored_procedure('ooh_reentry')
+sp_query <- sqlQuery(con, sp_call)
+clean_query <- cr_clean(sp_query, date = FALSE)
+
+# code for highlights
+
+dat <- filter(clean_query, months.since.exiting.out.of.home.care == 36) %>% 
+    filter(cohort.entry.date == max(cohort.entry.date)) %>%
+    mutate(re.entry.percent = round(re.entry.percent))
+
+reunification <- filter(dat, cd.discharge.type == 1) %>% select(re.entry.percent)
+adoption <- filter(dat, cd.discharge.type == 3) %>% select(re.entry.percent)
+guardianship <- filter(dat, cd.discharge.type == 4) %>% select(re.entry.percent)
+
+# close connection
+odbcCloseAll()
+```
+{  
+   "title":"Re-Entering Out-of-Home Care",
+   "subtitle":"By Exit Cohort",
+   "img":"",
+   "type":"visualization",
+   "visualizationType":"graph",
+   "tags":[  
+      "safety",
+      "out-of-home",
+      "age",
+      "county",
+      "race/ethnicity",
+      "cohort"
+   ],
+   "keywords":[
+      "reentry",
+      "re-entry"
+   ],
+   "blurb":"Children who exited out-of-home care to a permanency (reunification, adoption, guardianship) outcome but later re-entered care.",
+   "slug":"ooh-re-entry",
+   "unit":"Percent",
+   "config":{  
+      "table":"sp_ooh_reentry",
+      "transform":{  
+         "Function":"daterow",
+         "dateField":"Months Since Exiting Out-of-Home Care",
+         "valueFields":[  
+            "Re-Entry Percent"
+         ],
+         "removeFields":[]
+      },
+      "controls":[  
+         "qry_type_first_unique_ooh_reentry",
+         "discharge_type_safety",
+         "cohort_year_ooh_safety"
+      ],
+      "params":[  
+         "age_exit_safety",
+         "ethnicityCensus",
+         "gender",
+         "initSetng",
+         "longSetng",
+         "exitCounty",
+         "ooh_los",
+         "nbr_placement",
+         "ihs_services_ooh",
+         "reporter_type",
+         "access_type",
+         "allegation",
+         "finding",
+         "dependency_cd"
+      ],
+      "dateParams":[],
+      "requiredParams":[],
+      "showAllOthers":true,
+      "returnRowHeaders":[  
+         0,
+         1,
+         2,
+         4,
+         6,
+         8,
+         10,
+         12,
+         14,
+         16,
+         18,
+         20,
+         22,
+         24,
+         26,
+         28,
+         30
+      ],
+      "returnRowDateHeaders":[],
+      "returnRowControlHeaders":[  
+         1,
+         2
+      ],
+      "headerNames":[  
+         "&nbsp;",
+         "Cohort Entry Date*cohort_year_ooh_safety",
+         "qry_type_poc1_first_unique*qry_type_first_unique_ooh_reentry",
+         "Age Grouping=age_exit_safety",
+         "Race/Ethnicity",
+         "Gender=gender",
+         "Initial Placement=initSetng",
+         "Longest Placement=longSetng",
+         "County=exitCounty",
+         "Dependency=dependency_cd",
+         "Length of Service Desc=ooh_los",
+         "Placement Count Desc=nbr_placement",
+         "In-Home Service Desc=ihs_services_ooh",
+         "Reporter Desc=reporter_type",
+         "Access type desc=access_type",
+         "Allegation=allegation",
+         "Finding=finding",
+         "Discharge Type=discharge_type_safety"
+      ],
+      "returnRowStart":33,
+      "hideRow":"allEmpty",
+      "chartType":"line",
+      "labels":{  
+         "x":"Months Since Exiting Out-of-Home Care",
+         "y":"",
+         "yFormat":"##'%"
+      },
+      "numberFormat":{  
+         "fractionDigits":2,
+         "suffix":"%"
+      }
+   }
+}
+
+### Data Highlights
+
+<div class="stat">
+    <h4>Reunification </h4>
+    <p>`r reunification `%</p>
+</div>
+
+<div class="stat">
+    <h4>Adoption </h4>
+    <p>`r adoption `%</p>
+</div>
+
+<div class="stat">
+    <h4>Guardianship</h4>
+    <p>`r guardianship`%</p>
+</div>
+
+### Summary
+
+This graph examines re-entry into out-of-home care. It shows the percentage of children who exited out-of-home care to a permanent outcome (reunification, adoption, or guardianship) but later re-entered out-of-home care.
+
+#### Questions this graph can answer
+
+- From what type of permanency outcome have most children re-entered out-of-home care?
+
+- For how long after a permanency outcome are children at high risk of re-entering out-of-home care?
+
+#### See also
+
+<!-- NOTE: measure is deprecated -->
+<!-- - [Placement Rate by Prior Placement](https://portal.cssat.org/visualizations/placement-rate-order), for a look at how much more likely an out-of-home placement was for a household with a prior history of out-of-home care. -->
+
+- [Children Entering Out-of-Home Care (Count)](https://portal.cssat.org/visualizations/ooh-entry-counts), for a count of children who entered out-of-home care.
+
+### Notes
+
+This measure uses cohort data based on the year children exit care. Recent cohorts (in the last 4 years) have less data available due to the shorter follow-up time.
+
+If a child has a name change associated with an adoption, then it is not possible to link the pre-adoption record to a post-adoption re-entry. Thus the displayed re-entry rate following adoption is an underestimate of the true rate.

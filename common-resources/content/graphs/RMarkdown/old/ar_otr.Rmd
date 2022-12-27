@@ -1,0 +1,130 @@
+```{r, include=FALSE}
+library(pocr)
+library(lubridate)
+library(RODBC)
+library(dplyr)
+library(stringr)
+
+con <- odbcConnect("test_annie")
+
+results <- sqlQuery(con, "call sp_mp_placement_care_days_otr_limits('0')")
+names(results) <- make.names(str_replace_all(tolower(names(results)), '\\(|\\)', ''))
+names(results)[1] = "year"
+results$percent = round(results$percent, 1)
+
+# code for highlights
+age_17 <- filter(results, region == 0,
+                 age == 0,
+                 year == max(year))$percent
+age_15 <- filter(results, region == 0, age == 2, year == max(year))$percent
+age_13 <- filter(results, region == 0, age == 4, year == max(year))$percent
+
+# close connection
+odbcCloseAll()
+
+```
+{  
+   "title":"On-the-Run",
+   "subtitle":"Percent of Care-Days On-the-Run",
+   "img":"",
+   "type":"visualization",
+   "visualizationType":"graph",
+   "tags":[  
+      "well-being",
+      "annual report",
+      "region",
+      "out-of-home",
+      "foster care",
+      "stability",
+      "age",
+      "cfsr"
+   ],
+   "blurb":"Percentage of days youth in out-of-home care were on-the-run.",
+   "slug":"on-the-run",
+   "unit":"Percent of Care-Days On-the-Run",
+   "config":{  
+      "table":"sp_mp_placement_care_days_otr_limits",
+      "transform":{  
+         "Function":"daterow",
+         "dateField":"Fiscal Year/Year in Out-of-Home Care",
+         "valueFields":[  
+            "Percent"
+         ],
+         "removeFields":[]
+      },
+      "controls":[  
+         "region",
+         "otr_age_in_care"
+      ],
+      "params":[  
+         "dynamicMonthStart"
+      ],
+      "dateParams":[],
+      "requiredParams":[  
+         "dynamicMonthStart"
+      ],
+      "showAllOthers":true,
+      "returnRowHeaders":[  
+         0,
+         1,
+         2
+      ],
+      "returnRowDateHeaders":[  
+         0
+      ],
+      "returnRowControlHeaders":[  
+         0,
+         1,
+         2
+      ],
+      "headerNames":[  
+         "&nbsp;",
+         "Region*region",
+         "Age*otr_age_in_care"
+      ],
+      "returnRowStart":3,
+      "chartType":"line",
+      "labels":{  
+         "x":"",
+         "y":"",
+         "yFormat":"##'%"
+      },
+      "numberFormat":{  
+         "fractionDigits":2,
+         "suffix":"%"
+      }
+   }
+}
+
+### Data Highlights
+
+<div class="stat">
+    <h4>17-Year-Olds</h4>
+    <p>`r age_17`%</p>
+</div>
+
+<div class="stat">
+    <h4>15-Year-Olds</h4>
+    <p>`r age_15`%</p>
+</div>
+
+<div class="stat">
+    <h4>13-Year-Olds</h4>
+    <p>`r age_13`%</p>
+</div>
+
+### Summary
+
+This graph examines the percentage of care-days that teenagers spent on-the-run from an out-of-home placement.
+
+#### Questions this graph can answer
+
+- How much more likely to be on-the-run were 17 year-olds compared to 14 year-olds?
+
+- Have there been regional differences across the state in the percentage of care-days that teenagers were on-the-run? 
+
+### Notes
+
+This measure has been calculated by dividing the number of care-days on-the-run in a given fiscal year by the number of care-days for children in out-of-home care for that year. 
+
+

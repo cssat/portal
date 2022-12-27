@@ -1,0 +1,113 @@
+```{r, include=FALSE}
+library(pocr)
+library(lubridate)
+library(RODBC)
+library(dplyr)
+library(stringr)
+
+con <- odbcConnect("test_annie")
+
+results <- sqlQuery(con, "call sp_mp_sibling_placement('0')")
+names(results) <- make.names(str_replace_all(tolower(names(results)), '\\(|\\)', ''))
+
+# code for highights
+
+recent_year <- filter(results, fiscal.year.year.children.placed == max(fiscal.year.year.children.placed))
+first_year <- filter(results, fiscal.year.year.children.placed == min(fiscal.year.year.children.placed))
+
+# close connection
+odbcCloseAll()
+```
+{  
+   "title":"Siblings Placed Together",
+   "subtitle":"Percent of Care-Days",
+   "img":"",
+   "type":"visualization",
+   "visualizationType":"graph",
+   "tags":[ 
+      "well-being",
+      "annual report",
+      "out-of-home",
+      "foster care",
+      "placement"
+   ],
+   "keywords":[
+      "siblings"
+   ],
+   "blurb":"Time that siblings in out-of-home care were placed partially or all together.",
+   "slug":"sibling-care-days",
+   "unit":"Percent of Care-Days",
+   "config":{  
+      "table":"sp_mp_sibling_placement",
+      "transform":{  
+         "Function":"daterow",
+         "dateField":"Fiscal Year/Year Children Placed",
+         "valueFields":[  
+            "Percent"
+         ],
+         "removeFields":[]
+      },
+      "controls":[],
+      "params":[  
+         "dynamicMonthStart"
+      ],
+      "dateParams":[],
+      "requiredParams":[  
+         "dynamicMonthStart"
+      ],
+      "showAllOthers":true,
+      "returnRowHeaders":[  
+         0
+      ],
+      "returnRowDateHeaders":[  
+         0
+      ],
+      "returnRowControlHeaders":[],
+      "headerNames":[  
+         "&nbsp;"
+      ],
+      "returnRowStart":1,
+      "chartType":"line",
+      "labels":{  
+         "x":"",
+         "y":"",
+         "yFormat":"##'%"
+      },
+      "numberFormat":{  
+         "fractionDigits":2,
+         "suffix":"%"
+      }
+   }
+}
+
+### Data Highlights
+
+<div class="stat">
+    <h4>`r pretty_date(recent_year$fiscal.year.year.children.placed)`</h4>
+    <p>`r round(recent_year$percent)`%</p>
+</div>
+
+<div class="stat">
+    <h4>`r pretty_date(first_year$fiscal.year.year.children.placed)`</h4>
+    <p>`r round(first_year$percent)`%</p>
+</div>
+
+### Summary
+
+This graph shows the percentage of sibling care-days spent together in a fiscal year. All siblings in a family who are in out-of-home care are included.
+
+#### Questions this graph can answer
+
+- What percentage of time that siblings spent in out-of-home care has been spent with some or all of their siblings who were also in care?
+
+- If a child and their sibling were both in out-of-home care, what is the probability they were in the same placement on a given day?
+
+#### See also
+
+- [Siblings by Number of Siblings](https://portal.cssat.org/visualizations/siblings-number), for a snapshot of siblings placed together on a particular day, with a breakdown by the number of children in the family.
+
+### Notes
+
+In some cases, a child's best interests necessitate placement separate from their sibling(s) or in a non-family setting (e.g., to obtain specialized services in order to accomplish specific therapeutic goals).
+
+For example, if three brothers/sisters are in out-of-home care for 1 week, then there are 21 care-days provided. If two of the siblings are placed together for that time, with the third in a separate placement, then 14 of the care-days are together, so 67% of the care-days are together.

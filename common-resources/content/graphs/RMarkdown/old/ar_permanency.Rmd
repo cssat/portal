@@ -1,0 +1,130 @@
+```{r, include=FALSE}
+library(pocr)
+library(lubridate)
+library(RODBC)
+library(dplyr)
+library(stringr)
+
+con <- odbcConnect("test_annie")
+
+results <- sqlQuery(con, "call sp_mp_permanency_incidence_av('0')")
+names(results) <- make.names(str_replace_all(tolower(names(results)), '\\(|\\)', ''))
+
+filter(results, region == 0)
+
+# code for highlights
+
+# most recent data
+recent_date <- pretty_date(filter(results, region == 0, fiscal.year.removal.year == max(fiscal.year.removal.year))$fiscal.year.removal.year)
+recent_data <- round(filter(results, region == 0, fiscal.year.removal.year == max(fiscal.year.removal.year))$percent)
+
+# lowest rate
+lowest_data <- filter(results, region == 0) %>% filter(percent == min(percent)) %>% select(-region)
+
+# highest rate
+highest_data <- filter(results, region == 0) %>% filter(percent == max(percent)) %>% select(-region)
+
+# close connection
+odbcCloseAll()
+
+```
+{  
+   "title":"Timely Permanency",
+   "subtitle":"Within One Year of Out-of-Home Placement",
+   "img":"",
+   "type":"visualization",
+   "visualizationType":"graph",
+   "tags":[  
+      "permanency",
+      "annual report",
+      "region",
+      "out-of-home",
+      "foster care",
+      "cfsr"
+   ],
+   "blurb":"Children who achieved permanency within one year of out-of-home placement.",
+   "slug":"timely-permanency",
+   "unit":"Percent",
+   "config":{  
+      "table":"sp_mp_permanency_incidence_av",
+      "transform":{  
+         "Function":"daterow",
+         "dateField":"Fiscal Year/Removal Year",
+         "valueFields":[  
+            "Percent"
+         ],
+         "removeFields":[]
+      },
+      "controls":[  
+         "region"
+      ],
+      "params":[  
+         "dynamicMonthStart"
+      ],
+      "dateParams":[],
+      "requiredParams":[  
+         "dynamicMonthStart"
+      ],
+      "showAllOthers":true,
+      "returnRowHeaders":[  
+         1
+      ],
+      "returnRowDateHeaders":[],
+      "returnRowControlHeaders":[  
+         1
+      ],
+      "headerNames":[  
+         "&nbsp;",
+         "Region*region"
+      ],
+      "returnRowStart":2,
+      "chartType":"line",
+      "labels":{  
+         "x":"",
+         "y":"",
+         "yFormat":"##'%"
+      },
+      "numberFormat":{  
+         "fractionDigits":2,
+         "suffix":"%"
+      }
+   }
+}
+
+### Data Highlights
+
+<div class="stat">
+    <h4>Recent: `r recent_date`</h4>
+    <p>`r recent_data`%</p>
+</div>
+
+<div class="stat">
+    <h4>Low: `r pretty_date(lowest_data$fiscal.year.removal.year)`</h4>
+    <p>`r round(lowest_data$percent)`%</p>
+</div>
+
+<div class="stat">
+    <h4>High: `r pretty_date(highest_data$fiscal.year.removal.year)`</h4>
+    <p>`r round(highest_data$percent)`%</p>
+</div>
+
+### Summary
+
+This graph examines the percentage of children who achieved permanency within one year of entering out-of-home care.
+
+#### Questions this graph can answer
+
+- Has the percentage of children achieving permanency within one year changed over time?
+
+#### See also
+
+- [Permanency Outcomes (Cohort)](https://portal.cssat.org/visualizations/permanency-cohort), for a look at the speed of various permanency outcomes over time.
+
+- [Timely Adoption](https://portal.cssat.org/visualizations/timely-adoption), for a look at the speed of adoption following a termination of parental rights.
+
+
+### Notes
+
+This measure is calculate as the percentage of children and youth entering out-of-home care in a given state fiscal year who have an exit to reunification, adoption, or guardianship within one year of their out-of-home entry date and before their 18th birthday.
+
+Out-of-home care stays of seven days or less were excluded.

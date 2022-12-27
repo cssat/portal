@@ -1,0 +1,159 @@
+```{r, include=FALSE}
+library(pocr)
+library(lubridate)
+library(RODBC)
+library(dplyr)
+library(stringr)
+
+con <- odbcConnect("test_annie")
+
+results <- sqlQuery(con, "call sp_mp_rate_referral_scrn_in_ts()")
+names(results) <- make.names(str_replace_all(tolower(names(results)), '\\(|\\)', ''))
+
+# code for highlights
+
+min_data <- filter(results, region == 0, access.type == 0, month.year.of.screened.in.report == min(month.year.of.screened.in.report))
+max_data <- filter(results, region == 0, access.type == 0, month.year.of.screened.in.report == max(month.year.of.screened.in.report))
+
+# close connection
+odbcCloseAll()
+```
+{  
+   "title":"Screened-In Reports",
+   "subtitle":"Per 1,000 Households with a Report",
+   "img":"",
+   "type":"visualization",
+   "visualizationType":"graph",
+   "tags":[  
+      "safety",
+      "annual report",
+      "maltreatment",
+      "region",
+      "cps"
+   ],
+   "keywords": [
+      "referrals",
+      "intakes",
+      "screening"
+   ],
+   "blurb":"Rate of reports that are screened-in.",
+   "slug":"screening-rate",
+   "unit":"Screened-In Reports per 1,000 Reports",
+   "config":{  
+      "table":"sp_mp_rate_referral_scrn_in_ts",
+      "transform":{  
+         "Function":"daterow",
+         "dateField":"Month/Year of Screened-In Report",
+         "valueFields":[  
+            "Scatterplot (Actual Values)",
+            "Trend Line (Seasonally Adjusted)"
+         ],
+         "removeFields":[]
+      },
+      "controls":[  
+         "region",
+         "access_type_mp"
+      ],
+      "params":[],
+      "dateParams":[],
+      "requiredParams":[],
+      "showAllOthers":true,
+      "returnRowHeaders":[  
+         0,
+         1,
+         2
+      ],
+      "returnRowDateHeaders":[  
+         0
+      ],
+      "returnRowControlHeaders":[  
+         1,
+         2
+      ],
+      "headerNames":[  
+         "&nbsp;",
+         "Region*region",
+         "Access Type*access_type_mp"
+      ],
+      "returnRowStart":3,
+      "hideRow":"allEmpty",
+      "columnClusterSize":2,
+      "numberFormat":{  
+         "fractionDigits":2
+      },
+      "multicharts":{  
+         "Trend-Line":[  
+            {  
+               "chartType":"line",
+               "chartId":"chart1",
+               "labels":{  
+                  "x":"",
+                  "y":""
+               },
+               "hideColumns":[  
+                  0
+               ]
+            }
+         ],
+         "Trend-Line-with-Scatterplot":[  
+            {  
+               "chartType":"combo",
+               "chartId":"chart1",
+               "labels":{  
+                  "x":"",
+                  "y":""
+               },
+               "hideColumns":[]
+            }
+         ],
+         "Scatterplot":[  
+            {  
+               "chartType":"scatterChart",
+               "chartId":"chart1",
+               "labels":{  
+                  "x":"",
+                  "y":""
+               },
+               "hideColumns":[  
+                  1
+               ]
+            }
+         ]
+      }
+   }
+}
+
+### Data Highlights
+
+<div class="stat">
+    <h4>`r pretty_date(max_data$month.year.of.screened.in.report)`</h4>
+    <p>`r round(max_data$scatterplot.actual.values)`</p>
+</div>
+
+<div class="stat">
+    <h4>`r pretty_date(min_data$month.year.of.screened.in.report)`</h4>
+    <p>`r round(min_data$scatterplot.actual.values)`</p>
+</div>
+
+### Summary
+
+This graph calculates the rate at which 
+public reports of concern for child safety made to Children's Administration
+were screened-in for a CPS investigation or assessed for receipt of services.
+
+#### Questions this graph can answer
+
+- How many reports to Children's Administration received an investigation or an assessment for other services?
+
+#### See also
+
+- [Report Rate](https://portal.cssat.org/visualizations/report-rate), for the overall rate of reports.
+- [Placement Rate](https://portal.cssat.org/visualizations/placement-rate), for the rate at which screened-in reports resulted in out-of-home placement.
+
+### Notes
+
+All screened-in reports receive services; depending on the details this could be a CPS investigation, a CPS Risk-Only assessment, an alternative response such as [Family Assessment Response (FAR)](http://partnersforourchildren.org/resources/glossary#Family Assessment Response (FAR)) or Family Reconciliation Services (FRS).
+
+Reports were only counted if there had been more than 48 hours since the previous report about the same household.
+
+

@@ -1,0 +1,119 @@
+```{r, include=FALSE}
+library(pocr)
+library(lubridate)
+library(RODBC)
+library(dplyr)
+library(stringr)
+
+con <- odbcConnect("test_annie")
+
+results <- sqlQuery(con, "call sp_mp_college_enrollment_pvt();")
+names(results) <- make.names(str_replace_all(tolower(names(results)), '\\(|\\)|:', ''))
+
+# code for highlights
+
+recent_results <- filter(results, cohort.period == max(cohort.period), fl_disability == 0)
+
+# close connection
+odbcCloseAll()
+
+```
+{  
+   "title":"Post-Secondary Enrollment",
+   "subtitle":"Within One Year of High School Graduation",
+   "img":"",
+   "type":"visualization",
+   "visualizationType":"graph",
+   "tags":[  
+      "education",
+      "annual report",
+      "out-of-home",
+      "well-being",
+      "foster care"
+   ],
+   "keywords": [
+      "college"
+   ],
+   "blurb":"Percentage of students who enrolled in a post-secondary education course.",
+   "slug":"postsec-enrollment",
+   "unit":"Percent",
+   "config":{  
+      "table":"sp_mp_college_enrollment_pvt",
+      "controls":[  
+         "disability",
+         "HS_grad_yr"
+      ],
+      "params":[],
+      "dateParams":[],
+      "requiredParams":[],
+      "showAllOthers":true,
+      "returnRowHeaders":[  
+         0,
+         1
+      ],
+      "returnRowDateHeaders":[],
+      "returnRowControlHeaders":[  
+         0,
+         1
+      ],
+      "headerNames":[  
+         "Cohort Period*HS_grad_yr",
+         "fl_disability*disability"
+      ],
+      "returnRowStart":2,
+      "hideRow":"allEmpty",
+      "columnClusterSize":3,
+      "chartType":"column",
+      "labels":{  
+         "x":"",
+         "y":"",
+         "yFormat":"##'%"
+      },
+      "numberFormat":{  
+         "fractionDigits":2,
+         "suffix":"%"
+      }
+   }
+}
+
+### Data Highlights
+
+<div class="stat">
+    <h4>General Population</h4>
+    <p>`r round(recent_results$not.in.out.of.home.care)`%</p>
+</div>
+
+<div class="stat">
+    <h4>Free or Reduced Lunch</h4>
+    <p>`r round(recent_results$not.in.care.receiving.free.or.reduced.price.lunch)`%</p>
+</div>
+
+<div class="stat">
+    <h4>Out-of-Home</h4>
+    <p>`r round(recent_results$in.out.of.home.care)`%</p>
+</div>
+
+### Summary
+
+This graph examines the percentage of students who enrolled in a public post-secondary education institution. It  displays information for youth who:
+
+- Spent time in out-of-home care before completing their secondary education,
+- Were not in out-of-home care but received free or reduced lunch (an indication of poverty) during their secondary education
+- Did not receive a free or reduced lunch and were not in out-of-home care while receiving secondary education.  
+
+#### Questions this graph can answer
+
+- Has there been a difference in post-secondary enrollment between youth who spent time in out-of-home care and those who did not?
+
+- What percentage of students with disabilities enrolled in post-secondary education?
+
+#### See also
+
+- [Third Grade Reading](https://portal.cssat.org/visualizations/literacy), for the percentage of children who met third grade literacy proficiency standards.
+
+- [College Completion](https://portal.cssat.org/visualizations/postsec-completion), for the percentage of students who completed post-secondary education within 4 years of graduation.
+
+### Notes
+
+Public post-secondary education institutions includes 2-year and 4-year colleges and universities in Washington State. Any individual who spent at least one day in out-of-home care during their secondary education has been included in the out-of-home care group.
+
