@@ -3,11 +3,8 @@ node_modules
 src/.sass-cache
 
 ## Folders/files that shouldn't be stored
-public/config/local.php
-public/content-data
-public/config.json
+html/public/config/local.php
+html/public/content-data
+html/public/config.json
 
 *.iml
-
-sh.exe.stackdump
-

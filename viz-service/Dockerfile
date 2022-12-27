@@ -15,10 +15,6 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 WORKDIR /
 
 COPY ./viz-service/viz.portal.cssat.org.conf /etc/apache2/sites-available/vis.portal.cssat.org.conf
-# COPY ./bin/common/config.json /portal-visualizations/public/config.json
-# COPY ./bin/viz/local.php /portal-visualizations/public/config/local.php
-# COPY ./bin/viz/config.php /portal-visualizations/public/config/config.php
-
 
 RUN apt-get -y update --fix-missing
 RUN apt-get upgrade -y

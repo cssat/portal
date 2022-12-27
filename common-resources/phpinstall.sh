@@ -25,3 +25,4 @@ mv parsedown-1.7.3/Parsedown.php /${VIRTUAL_HOST_ROOT}/public/app/parsedown.php
 rm /home/temp.zip
 
 /usr/sbin/apache2ctl -D FOREGROUND
+
