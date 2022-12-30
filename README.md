@@ -42,15 +42,18 @@ This is necessary because the DNS inside the docker container was using a DNS se
 
 ### Local Machine Setup
 
-Make sure that the following two lines are added to your `/etc/hosts` file. 
+1. Make sure that the following two lines are added to your `/etc/hosts` file. To avoid setting our own DNS server, we add these entries which your machine will check first, before contacting its DNS server. Since local host will find a domain listing here, it won't contact a DNS server and we can browse the portal locally using a production domain. 
 
 ```{bash}
 127.0.0.1 viz.portal.cssat.org
 127.0.0.1 portal.cssat.org
 ```
 
-To avoid setting our own DNS server, we add these entries which your machine will check first, before contacting its DNS server. Since local host will find a domain listing here, it won't contact a DNS server and we can browse the portal locally using a production domain. 
+2. Install `jq` for assistance in parsing json from the command line. 
 
+```{bash}
+brew install jq
+```
 
 ### AWS Setup
 
@@ -68,5 +71,8 @@ Default region name [None]: us-west-2
 Default output format [None]: json
 ```
 
-...To be continued
+### Pushing Images to ECR
 
+./ecr-push.sh $(aws configure get region --profile default) browse 1.0.0-a.1
+
+./ecr-push.sh $(aws configure get region --profile default) viz 1.0.0-a.1

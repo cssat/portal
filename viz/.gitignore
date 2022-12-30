@@ -1,0 +1,15 @@
+.Rproj.user
+.Rhistory
+.RData
+
+html/public/content
+html/public/data
+html/public/content-data
+
+.env
+
+html/public/app/composer/*
+html/public/app/slim/*
+html/public/app/parsedown.php
+html/public/app/autoload.php
+
