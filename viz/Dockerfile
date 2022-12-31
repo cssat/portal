@@ -64,6 +64,9 @@ RUN a2enmod proxy_http
 
 COPY common-resources/phpinstall.sh phpinstall.sh
 
+COPY ./viz/html /portal-visualizations/  
+COPY ./common-resources/ /portal-visualizations/public/content-data/   
+
 RUN chown -R www-data:www-data phpinstall.sh
 
 RUN ["chmod", "+x", "phpinstall.sh"]

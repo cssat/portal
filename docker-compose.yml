@@ -10,8 +10,8 @@ services:
         - viz
         - browse
         # - logging-service
-        volumes:
-            - https-portal-data:/var/lib/https-portal        
+        # volumes:
+        #     - https-portal-data:/var/lib/https-portal        
         restart: always
         environment:
             DOMAINS: 'viz.portal.cssatanalytics.org -> http://viz, portal.cssatanalytics.org -> http://browse'
@@ -36,17 +36,18 @@ services:
     viz:
         env_file:
             ./viz/.env    
-        build: 
-            context: .
-            dockerfile: ./viz/Dockerfile      
+        # build: 
+        #     context: .
+            #dockerfile: ./viz/Dockerfile    
+        image: "${VIZ_IMAGE_REPO_URI}:1.0.0-a.1"  
         # depends_on:
         #     - logging-service
         networks:
             viz: 
                 ipv4_address: 172.20.0.3       
-        volumes:
-            - ./viz/html:/portal-visualizations/  
-            - ./common-resources/:/portal-visualizations/public/content-data/            
+        # volumes:
+        #     - ./viz/html:/portal-visualizations/  
+        #     - ./common-resources/:/portal-visualizations/public/content-data/            
         environment:
             CONTENT_PATH: './content-data/content/graphs/'
             VIRTUAL_HOST: viz.portal.cssatanalytics.org
@@ -66,14 +67,15 @@ services:
         # links: 
         #     - logging-service            
     browse:
-        build: 
-            context: .
-            dockerfile: ./browse/Dockerfile      
+        image: "${BROWSE_IMAGE_REPO_URI}:1.0.0-a.1"              
+        # build: 
+        #     context: .
+            #dockerfile: ./browse/Dockerfile      
         # depends_on:
         #     - logging-service        
-        volumes:
-            - ./browse/html:/portal-browse/  
-            - ./common-resources/:/portal-browse/public/content-data/         
+        # volumes:
+        #     - ./browse/html:/portal-browse/  
+        #     - ./common-resources/:/portal-browse/public/content-data/         
         environment:
             VIRTUAL_HOST: portal.cssatanalytics.org
             VIRTUAL_HOST_ROOT: portal-browse            
@@ -106,8 +108,8 @@ services:
     #         viz: 
     #             ipv4_address: 172.20.0.6                
 
-volumes:
-    https-portal-data:
+# volumes:
+#     https-portal-data:
 
 networks:
   viz:

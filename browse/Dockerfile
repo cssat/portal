@@ -21,6 +21,10 @@ RUN a2enmod proxy_http
 
 COPY ./common-resources/phpinstall.sh home/phpinstall.sh
 
+COPY ./browse/html /portal-browse/  
+COPY ./common-resources/ /portal-browse/public/content-data/   
+
+
 RUN chown -R www-data:www-data home
 
 RUN chown -R www-data:www-data home/phpinstall.sh
