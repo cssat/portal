@@ -55,6 +55,13 @@ This is necessary because the DNS inside the docker container was using a DNS se
 brew install jq
 ```
 
+
+3. Install `grep` for assistance in text parsing. Brew will install `ggrep` which will avoid conflicts with Mac OS X configurations present in the standard `grep` implemetnation. 
+
+```{bash}
+brew install jq
+```
+
 ### AWS Setup
 
 1. Have an authorized member of the portal team create an IAM user account. This account should be added to the `docker-ecs-integration-group` user group and should be configured for programmatic access, such that the user is provided with an Access key ID and a Secret access key ID. 
@@ -73,6 +80,11 @@ Default output format [None]: json
 
 ### Pushing Images to ECR
 
-./ecr-push.sh $(aws configure get region --profile default) browse 1.0.0-a.1
+./ecr-push.sh browse 1.0.0-a.1
 
-./ecr-push.sh $(aws configure get region --profile default) viz 1.0.0-a.1
+./ecr-push.sh viz 1.0.0-a.1
+
+
+
+
+
